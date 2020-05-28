@@ -21,14 +21,20 @@ export default class RegisterScreen extends React.Component {
   }
 
 	_validate = ()=>{
-		const requiredFields = ['firstName', 'familyName', 'email', 'password'];
+    const requiredFields = [
+      { key: 'firstName', label: 'First name' },
+      { key: 'familyName', label: 'Family name' },
+      { key: 'email', label: 'Email' },
+      { key: 'password', label: 'Password' },
+    ];
 		var isValid = true;
 
-		requiredFields.map((key) => {
+		requiredFields.map((field) => {
+      const {key, label} = field;
 			if (!this.state[key]){
 				isValid = false;
 				this.setState({
-					[key + '_error']: formatMessage(this.props.globalize, 'auth_' + key + '_error')
+					[key + '_error']: label + ' is required'
 				})
 			}else{
 				this.setState({
@@ -48,7 +54,9 @@ export default class RegisterScreen extends React.Component {
 
 
   _submit = ()=>{
-
+    if(this._validate()){
+      this.props.navigation.navigate('Main');
+    }
   }
 
   render(){
@@ -108,10 +116,10 @@ export default class RegisterScreen extends React.Component {
                   secureTextEntry={true} 
                   returnKeyType="done" 
                   ref={(input) => { this.passwordInput = input; }} 
-                  onSubmitEditing={() => this._submit()} 
+                  onSubmitEditing={this._submit} 
                   onChangeText={(text) => this.setState({password: text})}
                   />
-                  <TouchableOpacity style={styles.submitButton}>
+                  <TouchableOpacity style={styles.submitButton} onPress={this._submit}>
                     <Text style={[styles.text, styles.submitButtonLabel]}>AGREE AND JOIN</Text>
                   </TouchableOpacity>
               </View>
