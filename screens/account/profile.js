@@ -1,106 +1,137 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Platform, StyleSheet, View, Text } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
+import Layout from '../../constants/Layout';
+import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Routes } from '../../constants/Routes';
 
-export default function Profile() {
+export default function Profile({ navigation: { navigate } }) {
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
         <CustomHeader/>
         
+        <Text style={styles.titleText}>Thua Nguyen</Text>
+        <View style={styles.profileCompleteContainer}>
+          <Text style={styles.text}>Your profile is complete.</Text>
+
+          <View style={styles.completeBarContainer}>
+            <View style={styles.completeBar}></View>
+            <View style={styles.completeBar}></View>
+            <View style={styles.completeBar}></View>
+            <View style={[styles.completeBar, styles.completeRedBar]}></View>
+            <View style={[styles.completeBar, styles.completeRedBar]}></View>
+
+            <TouchableOpacity style={styles.updateProfileButton}><Text style={styles.updateProfileText}>Update</Text></TouchableOpacity>
+          </View>
+        </View>
+          <View style={styles.separator}></View>
+          <View style={styles.buttonListContainer}>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={()=> navigate(Routes.accountSetup)}>
+                <MaterialCommunityIcons name="briefcase-edit-outline" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>Account Setup</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.button}>
+                <MaterialCommunityIcons name="account-check-outline" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>Verify Credentials</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <MaterialIcons name="person" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>Users</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <MaterialCommunityIcons name="office-building" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>Company</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <MaterialCommunityIcons name="medal" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>My Rewards</Text>
+              </TouchableOpacity>
+              
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button}>
+                <FontAwesome5 name="handshake" size={32} color="#333" />
+                <Text style={styles.buttonLabel}>Agreements</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <MaterialCommunityIcons name="star" size={32} color="#010101" />
+                <Text style={styles.buttonLabel}>Rating</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
       </ScrollView>
-    </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  text: {
+    fontSize: 16
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+  titleText: {
+    fontSize: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#DEE6EF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc'
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
+  profileCompleteContainer:{
     paddingVertical: 20,
+    paddingHorizontal: 20,
   },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
+  completeBarContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
-  navigationFilename: {
-    marginTop: 5,
+  completeBar:{
+    borderBottomColor: '#1BB147',
+    borderBottomWidth: 1,
+    width: Layout.window.width / 6 - 20
   },
-  helpContainer: {
-    marginTop: 15,
+  completeRedBar: {
+    borderBottomColor: '#FF261A',
+  },
+  updateProfileButton: {
+    backgroundColor: '#729FCF',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginLeft: 0,
+  },
+  updateProfileText:{
+    textTransform: 'uppercase'
+  },
+  separator: {
+    paddingBottom: 10,
+    marginHorizontal: 10,
+    borderBottomWidth: 6,
+    borderBottomColor: '#ccc'
+  },
+  buttonListContainer:{
+    padding: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+  button:{
+    flexDirection: 'row',
+    alignContent: 'center',
     alignItems: 'center',
+    padding: 10
   },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+  buttonLabel:{
+    color: '#333',
+    marginLeft: 10
+  }
 });

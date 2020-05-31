@@ -8,9 +8,11 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 import RegisterScreen from './screens/auth/RegisterScreen';
 import ProfileScreen from './screens/account/profile';
+import AccountSetupScreen from './screens/account/accountSetup';
 import {AuthContext} from './context/auth';
 import { Routes } from './constants/Routes';
 import Layout from './constants/Layout';
+import AddOrEditCreditCardScreen from './screens/account/addOrEditCreditCard';
 
 const Stack = createStackNavigator();
 export default function App(props) {
@@ -105,8 +107,10 @@ export default function App(props) {
             </Stack.Navigator>
             ) : (
             <Stack.Navigator>
-              <Stack.Screen name="Main" component={BottomTabNavigator} />
+              {/* <Stack.Screen name="Main" component={BottomTabNavigator} /> */}
+              <Stack.Screen name={Routes.addOrEditCard} component={AddOrEditCreditCardScreen}  options={Layout.defaultHeaderConfig}/>
               <Stack.Screen name={Routes.settings} component={ProfileScreen}  options={Layout.defaultHeaderConfig}/>
+              <Stack.Screen name={Routes.accountSetup} component={AccountSetupScreen}  options={Layout.defaultHeaderConfig}/>
             </Stack.Navigator>
             )}
           </NavigationContainer>
