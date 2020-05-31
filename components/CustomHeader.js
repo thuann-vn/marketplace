@@ -1,47 +1,63 @@
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
-import { Avatar, Badge, Icon, withBadge } from 'react-native-elements';
-import Menu, { MenuItem } from "react-native-material-menu";
+import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import Popover from 'react-native-popover-view';
+import { withNavigation } from '@react-navigation/compat';
 
 import Colors from '../constants/Colors';
 
-export default class CustomHeader extends React.Component {
+class CustomHeader extends React.Component {
   constructor(props){
-    super(props)
+    super(props);
+
+    this.state = {
+      accountSettingVisible: false
+    }
   }
+
+  _accountSettingToggle = () =>{
+    this.setState({accountSettingVisible: !this.state.accountSettingVisible});
+  }
+
+  _navigate =  (route) =>{
+    this._accountSettingToggle();
+    this.props.navigation.navigate(route);
+  }
+
+  _logout = () => {
+    this.props.navigation.navigate("Auth");
+  }
+
   render(){
     return (
     <View style={styles.container}>
-        <Menu
-          ref={ref => (this._headerMenu = ref)}
-          button={
-            <Avatar
-              size="small"
-              rounded
-              onPress={() => this._headerMenu.show()}
-              source={require('../assets/images/default_avatar.png')}
-              containerStyle={styles.avatar}
-            />
-         
-          }
-        >
-          <MenuItem onPress={()=>{
-          }}>
+        <Avatar
+          ref={ref => this.avatarRef = ref}
+          size="small"
+          rounded
+          source={require('../assets/images/default_avatar.png')}
+          containerStyle={styles.avatar}
+          onPress={this._accountSettingToggle}
+        />
+        <Popover mode="rn-modal"  
+          placement="bottom"
+          isVisible={this.state.accountSettingVisible}
+          fromView={this.avatarRef}
+          onRequestClose={() => this._accountSettingToggle()}>
+          <TouchableOpacity onPress={()=> this._navigate('settings')}>
             <View style={styles.menuItem}>
-              <Ionicons name="md-search" style={styles.menuIcon} size={22} />
+              <Ionicons name="md-settings" style={styles.menuIcon} size={22} />
               <Text style={styles.menuText}>Settings</Text>
             </View>
-          </MenuItem>
-          <MenuItem onPress={()=>{
-          }}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=> this._logout()}>
             <View style={styles.menuItem}>
-              <Ionicons name="md-search" style={styles.menuIcon} size={22} />
+              <Ionicons name="md-log-out" style={styles.menuIcon} size={22} />
               <Text style={styles.menuText}>Logout</Text>
             </View>
-          </MenuItem>
-        </Menu>
-
+          </TouchableOpacity>
+        </Popover>
         <View style={styles.searchInputContainer}>
           <Ionicons
             name="md-search"
@@ -63,6 +79,8 @@ export default class CustomHeader extends React.Component {
   }
   
 }
+
+export default withNavigation(CustomHeader);
 
 
 const styles = StyleSheet.create({
@@ -94,16 +112,18 @@ const styles = StyleSheet.create({
   },
   searchIcon:{
     position: 'absolute',
-    top: 5,
+    top: 0,
     left: 10,
     color: '#777'
   },
   menuItem:{
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    padding: 5,
   },
   menuText:{
-    color: '#000'
+    color: '#000',
+    marginLeft: 10
   }
 });
 
