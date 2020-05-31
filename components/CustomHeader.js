@@ -28,7 +28,8 @@ class CustomHeader extends React.Component {
   }
 
   _logout = () => {
-    this.context.signOut()
+    this._accountSettingToggle();
+    this.context.signOut();
   }
 
   render(){

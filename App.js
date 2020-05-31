@@ -99,14 +99,16 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
         <AuthContext.Provider value={authContext}>
           <NavigationContainer linking={LinkingConfiguration}>
+            {state.userToken == null ? (
             <Stack.Navigator>
-              {state.userToken == null ? (
-              <Stack.Screen name="Auth" component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
+              <Stack.Screen name={Routes.auth} component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
+            </Stack.Navigator>
             ) : (
+            <Stack.Navigator>
               <Stack.Screen name="Main" component={BottomTabNavigator} />
-            )}
               <Stack.Screen name={Routes.settings} component={ProfileScreen}  options={Layout.defaultHeaderConfig}/>
             </Stack.Navigator>
+            )}
           </NavigationContainer>
         </AuthContext.Provider>
       </View>
