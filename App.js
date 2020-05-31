@@ -7,7 +7,10 @@ import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 import RegisterScreen from './screens/auth/RegisterScreen';
+import ProfileScreen from './screens/account/profile';
 import {AuthContext} from './context/auth';
+import { Routes } from './constants/Routes';
+import Layout from './constants/Layout';
 
 const Stack = createStackNavigator();
 export default function App(props) {
@@ -98,10 +101,11 @@ export default function App(props) {
           <NavigationContainer linking={LinkingConfiguration}>
             <Stack.Navigator>
               {state.userToken == null ? (
-              <Stack.Screen name="Auth" component={RegisterScreen} options={{headerShown: false}}/>
+              <Stack.Screen name="Auth" component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
             ) : (
               <Stack.Screen name="Main" component={BottomTabNavigator} />
             )}
+              <Stack.Screen name={Routes.settings} component={ProfileScreen}  options={Layout.defaultHeaderConfig}/>
             </Stack.Navigator>
           </NavigationContainer>
         </AuthContext.Provider>

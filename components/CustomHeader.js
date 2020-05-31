@@ -7,6 +7,7 @@ import { withNavigation } from '@react-navigation/compat';
 
 import Colors from '../constants/Colors';
 import { AuthContext } from '../context/auth';
+import { Routes } from '../constants/Routes';
 
 class CustomHeader extends React.Component {
   constructor(props){
@@ -46,7 +47,7 @@ class CustomHeader extends React.Component {
           isVisible={this.state.accountSettingVisible}
           fromView={this.avatarRef}
           onRequestClose={() => this._accountSettingToggle()}>
-          <TouchableOpacity onPress={()=> this._navigate('settings')}>
+          <TouchableOpacity onPress={()=> this._navigate(Routes.settings)}>
             <View style={styles.menuItem}>
               <Ionicons name="md-settings" style={styles.menuIcon} size={22} />
               <Text style={styles.menuText}>Settings</Text>
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   },
   searchIcon:{
     position: 'absolute',
-    top: 0,
+    top: 5,
     left: 10,
     color: '#777'
   },
