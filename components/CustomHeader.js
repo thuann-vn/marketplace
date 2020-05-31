@@ -6,6 +6,7 @@ import Popover from 'react-native-popover-view';
 import { withNavigation } from '@react-navigation/compat';
 
 import Colors from '../constants/Colors';
+import { AuthContext } from '../context/auth';
 
 class CustomHeader extends React.Component {
   constructor(props){
@@ -26,7 +27,7 @@ class CustomHeader extends React.Component {
   }
 
   _logout = () => {
-    this.props.navigation.navigate("Auth");
+    this.context.signOut()
   }
 
   render(){
@@ -80,6 +81,7 @@ class CustomHeader extends React.Component {
   
 }
 
+CustomHeader.contextType = AuthContext;
 export default withNavigation(CustomHeader);
 
 

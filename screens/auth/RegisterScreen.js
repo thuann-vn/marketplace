@@ -1,17 +1,16 @@
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { MonoText } from '../../components/StyledText';
 import Colors from '../../constants/Colors';
 import {
 	KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scroll-view';
 import { validateEmail } from '../../utils/commonUtil';
-
+import { AuthContext } from '../../context/auth';
 
 export default class RegisterScreen extends React.Component {
+  static contextType = AuthContext;
   constructor(props){
     super(props);
 
@@ -54,6 +53,7 @@ export default class RegisterScreen extends React.Component {
 
 
   _submit = ()=>{
+    console.log(this.context.signIn());
     if(this._validate()){
       this.props.navigation.navigate('Main');
     }
