@@ -3,5 +3,6 @@ export const Routes = {
     'settings' : 'SETTINGS',
     'accountSetup' : 'ACCOUNT_SETUP',
     'addOrEditCard' : 'ADD_OR_EDIT_CARD',
-    'addOrEditBank' : 'ADD_OR_EDIT_BANK'
+    'addOrEditBank' : 'ADD_OR_EDIT_BANK',
+    'accountVerify' : 'ACCOUNT_VERIFY'
 }

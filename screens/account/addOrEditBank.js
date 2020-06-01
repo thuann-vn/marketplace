@@ -1,19 +1,22 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text, CheckBox } from 'react-native';
+import { Platform, StyleSheet, View, Text } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { CheckBox } from 'react-native-elements';
+import Colors from '../../constants/Colors';
 import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 
-export default function AddOrEditCreditCardScreen() {
+export default function AddOrEditBankScreen() {
   const [name, setName] = React.useState('');
-  const [cardNo, setCardNo] = React.useState('');
-  const [cvv, setCvv] = React.useState('');
-  const [exp, setExp] = React.useState('');
-  const [billAddress, setBillAddress] = React.useState('');
+  const [routingName, setRoutingName] = React.useState('');
+  const [accountNumber, setAccountNumber] = React.useState('');
   const [isDefault, setDefault] = React.useState(false);
+  const [isDefaultReceipt, setDefaultReceipt] = React.useState(false);
+  const [isSelected, setSelection] = React.useState(false);
+
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
@@ -22,20 +25,29 @@ export default function AddOrEditCreditCardScreen() {
       <View style={styles.separator}></View>
       <View style={styles.listContainer}>
         <AddCardAndBankSidebar />
-
         <View style={styles.inputContainer}>
-          <TextInput placeholder="NAME ON THE CARD" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
           <View style={styles.cardNoContainer}>
-            <TextInput placeholder="CREDIT CARD" value={cardNo} onChangeText={setCardNo} style={[styles.input, styles.cardNoInput]} placeholderTextColor="#333" />
-            <TextInput placeholder="CVV" value={cvv} onChangeText={setCvv} style={[styles.input, styles.cvvInput]} placeholderTextColor="#333" />
-            <TextInput placeholder="EXP" value={exp} onChangeText={setExp} style={[styles.input, styles.expInput]} placeholderTextColor="#333" />
+            <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[styles.input, styles.routingNameInput]} placeholderTextColor="#333" />
+            <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[styles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
           </View>
-          <TextInput placeholder="BILLING ADDRESS" value={billAddress} onChangeText={setBillAddress} style={styles.input} placeholderTextColor="#333" />
+          <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
 
+          <CheckBox
+            title='Default Payment'
+            checked={isDefault}
+            onPress={() => setDefault(!isDefault)}
+            containerStyle={styles.checkbox}
+            checkedColor={Colors.mainColor}
+            wrapperStyle={{ marginHorizontal: 0 }}
+          />
+          <CheckBox
+            title='Default Receipt'
+            checked={isDefaultReceipt}
+            onPress={() => setDefaultReceipt(!isDefaultReceipt)}
+            containerStyle={styles.checkbox}
+            checkedColor={Colors.mainColor}
+          />
           <View style={styles.saveButtonContainer}>
-            <CheckBox style={styles.defaultCheckbox} value={isDefault} onChange={setDefault} />
-            <Text style={styles.defaultCheckboxLabel}>Default Payment</Text>
-
             <TouchableOpacity style={styles.saveButton}>
               <Text style={styles.saveButtonLabel}>SAVE</Text>
             </TouchableOpacity>
@@ -103,14 +115,19 @@ const styles = StyleSheet.create({
   cardNoInput: {
     flex: 1
   },
-  cvvInput: {
-    marginHorizontal: 5
+  routingNameInput: {
+    flex: 1,
+    marginRight: 5
+  },
+  accountNumberInput: {
+    flex: 1
   },
   saveButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
+    marginTop: 10
   },
   saveButton: {
     backgroundColor: '#666666',
@@ -127,11 +144,21 @@ const styles = StyleSheet.create({
   defaultCheckbox: {
     width: 20,
     height: 20,
-    marginTop: 10,
     borderColor: '#ccc'
   },
   defaultCheckboxLabel: {
     marginLeft: 10,
     marginRight: 10
-  }
+  },
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    paddingLeft: 0,
+    marginLeft: 0,
+    backgroundColor: 'transparent'
+  },
 });
