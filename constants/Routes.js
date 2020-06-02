@@ -6,5 +6,6 @@ export const Routes = {
     'addOrEditBank' : 'ADD_OR_EDIT_BANK',
     'accountVerify' : 'ACCOUNT_VERIFY',
     'profileEdit' : 'PROFILE_EDIT',
-    'accountManagement': 'ACCOUNT_MANAGEMENT'
+    'accountManagement': 'ACCOUNT_MANAGEMENT',
+    'accountManagementDetail': 'ACCOUNT_MANAGEMENT_DETAIL'
 }

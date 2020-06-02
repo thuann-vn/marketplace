@@ -17,6 +17,7 @@ import AddOrEditBankScreen from './screens/account/addOrEditBank';
 import AccountVerification from './screens/account/accountVerification';
 import ProfileEditScreen from './screens/account/profileEdit';
 import ManagementScreen from './screens/account/management';
+import ManagementDetailScreen from './screens/account/managementDetail';
 
 const Stack = createStackNavigator();
 export default function App(props) {
@@ -114,6 +115,7 @@ export default function App(props) {
               {/* <Stack.Screen name="Main" component={BottomTabNavigator} /> */}
               {/* <Stack.Screen name={Routes.profileEdit} component={ProfileEditScreen}  options={Layout.defaultHeaderConfig}/>
               <Stack.Screen name={Routes.accountVerify} component={AccountVerification}  options={Layout.defaultHeaderConfig}/> */}
+              <Stack.Screen name={Routes.accountManagementDetail} component={ManagementDetailScreen}  options={Layout.defaultHeaderConfig}/>
               <Stack.Screen name={Routes.accountManagement} component={ManagementScreen}  options={Layout.defaultHeaderConfig}/>
               <Stack.Screen name={Routes.addOrEditBank} component={AddOrEditBankScreen}  options={Layout.defaultHeaderConfig}/>
               <Stack.Screen name={Routes.addOrEditCard} component={AddOrEditCreditCardScreen}  options={Layout.defaultHeaderConfig}/>
