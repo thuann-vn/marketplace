@@ -10,9 +10,14 @@ export default function ProfileName(props) {
   return (
     <View style={styles.container}>
         <Text style={styles.profileName}>Thua Nguyen</Text>
-        <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>{props.title || 'ACCOUNT SETUP'}</Text>
-        </View>
+        {
+            !props.hideTitle && (
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>{props.title || 'ACCOUNT SETUP'}</Text>
+                </View>
+            )
+        }
+       
     </View>
   );
 }

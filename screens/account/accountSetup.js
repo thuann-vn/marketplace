@@ -28,12 +28,13 @@ export default function AccountSetupScreen() {
   const navigation = useNavigation();
 
   const _renderItems = ({ item }) => {
-    console.log(item);
     return (
       <View style={styles.listItem}>
-        <Text style={styles.cardNo}>{item.cardNo}</Text>
-        <Text style={styles.cardName}>{item.cardName}</Text>
-        <Text style={styles.type}>{item.type}</Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.cardNo}>{item.cardNo}</Text>
+          <Text style={styles.cardName}>{item.cardName}</Text>
+          <Text style={styles.type}>{item.type}</Text>
+        </View>
 
         <TouchableOpacity style={styles.listItemButton}>
           <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />

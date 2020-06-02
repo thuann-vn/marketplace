@@ -53,7 +53,7 @@ export default class RegisterScreen extends React.Component {
 
 
   _submit = ()=>{
-    console.log(this.context.signIn());
+    this.context.signIn();
     if(this._validate()){
       this.props.navigation.navigate('Main');
     }

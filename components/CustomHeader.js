@@ -1,6 +1,6 @@
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, Platform, StatusBar } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Popover from 'react-native-popover-view';
 import { withNavigation } from '@react-navigation/compat';
@@ -89,14 +89,14 @@ export default withNavigation(CustomHeader);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingTop: StatusBar.currentHeight,
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     paddingTop: 20,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderColor
+    borderBottomColor: Colors.borderColor,
   },
   avatar: {
     backgroundColor: '#ccc'
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
   searchInputContainer:{
     flex: 1,
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
+    height: 36,
   },
   searchInput:{
     borderWidth:1,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     paddingLeft: 40,
-    borderRadius: 2
+    borderRadius: 2,
   },
   searchIcon:{
     position: 'absolute',

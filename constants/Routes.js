@@ -4,5 +4,6 @@ export const Routes = {
     'accountSetup' : 'ACCOUNT_SETUP',
     'addOrEditCard' : 'ADD_OR_EDIT_CARD',
     'addOrEditBank' : 'ADD_OR_EDIT_BANK',
-    'accountVerify' : 'ACCOUNT_VERIFY'
+    'accountVerify' : 'ACCOUNT_VERIFY',
+    'profileEdit' : 'PROFILE_EDIT'
 }

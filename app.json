@@ -23,7 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesIcloudStorage": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

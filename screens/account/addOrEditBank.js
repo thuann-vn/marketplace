@@ -3,11 +3,12 @@ import { Platform, StyleSheet, View, Text } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
-import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { CheckBox } from 'react-native-elements';
 import Colors from '../../constants/Colors';
 import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function AddOrEditBankScreen() {
   const [name, setName] = React.useState('');
@@ -19,42 +20,49 @@ export default function AddOrEditBankScreen() {
 
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
+    <SafeAreaView style={styles.container}>
       <CustomHeader />
-      <ProfileName />
-      <View style={styles.separator}></View>
-      <View style={styles.listContainer}>
-        <AddCardAndBankSidebar />
-        <View style={styles.inputContainer}>
-          <View style={styles.cardNoContainer}>
-            <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[styles.input, styles.routingNameInput]} placeholderTextColor="#333" />
-            <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[styles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
-          </View>
-          <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
 
-          <CheckBox
-            title='Default Payment'
-            checked={isDefault}
-            onPress={() => setDefault(!isDefault)}
-            containerStyle={styles.checkbox}
-            checkedColor={Colors.mainColor}
-            wrapperStyle={{ marginHorizontal: 0 }}
-          />
-          <CheckBox
-            title='Default Receipt'
-            checked={isDefaultReceipt}
-            onPress={() => setDefaultReceipt(!isDefaultReceipt)}
-            containerStyle={styles.checkbox}
-            checkedColor={Colors.mainColor}
-          />
-          <View style={styles.saveButtonContainer}>
-            <TouchableOpacity style={styles.saveButton}>
-              <Text style={styles.saveButtonLabel}>SAVE</Text>
-            </TouchableOpacity>
+      <KeyboardAwareScrollView
+        extraScrollHeight={100}
+        enableOnAndroid={true}
+        keyboardShouldPersistTaps='handled'
+      >
+        <ProfileName />
+        <View style={styles.separator}></View>
+        <View style={styles.listContainer}>
+          <AddCardAndBankSidebar />
+          <View style={styles.inputContainer}>
+            <View style={styles.cardNoContainer}>
+              <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[styles.input, styles.routingNameInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[styles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
+            </View>
+            <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
+
+            <CheckBox
+              title='Default Payment'
+              checked={isDefault}
+              onPress={() => setDefault(!isDefault)}
+              containerStyle={styles.checkbox}
+              checkedColor={Colors.mainColor}
+              wrapperStyle={{ marginHorizontal: 0 }}
+            />
+            <CheckBox
+              title='Default Receipt'
+              checked={isDefaultReceipt}
+              onPress={() => setDefaultReceipt(!isDefaultReceipt)}
+              containerStyle={styles.checkbox}
+              checkedColor={Colors.mainColor}
+            />
+            <View style={styles.saveButtonContainer}>
+              <TouchableOpacity style={styles.saveButton}>
+                <Text style={styles.saveButtonLabel}>SAVE</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 }
 
