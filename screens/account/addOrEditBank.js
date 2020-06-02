@@ -9,6 +9,7 @@ import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonStyles } from '../../constants/Styles';
 
 export default function AddOrEditBankScreen() {
   const [name, setName] = React.useState('');
@@ -34,16 +35,16 @@ export default function AddOrEditBankScreen() {
           <AddCardAndBankSidebar />
           <View style={styles.inputContainer}>
             <View style={styles.cardNoContainer}>
-              <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[styles.input, styles.routingNameInput]} placeholderTextColor="#333" />
-              <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[styles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[CommonStyles.input, styles.routingNameInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[CommonStyles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
             </View>
-            <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
+            <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={CommonStyles.input} placeholderTextColor="#333" />
 
             <CheckBox
               title='Default Payment'
               checked={isDefault}
               onPress={() => setDefault(!isDefault)}
-              containerStyle={styles.checkbox}
+              containerStyle={CommonStyles.checkbox}
               checkedColor={Colors.mainColor}
               wrapperStyle={{ marginHorizontal: 0 }}
             />
@@ -51,12 +52,12 @@ export default function AddOrEditBankScreen() {
               title='Default Receipt'
               checked={isDefaultReceipt}
               onPress={() => setDefaultReceipt(!isDefaultReceipt)}
-              containerStyle={styles.checkbox}
+              containerStyle={CommonStyles.checkbox}
               checkedColor={Colors.mainColor}
             />
             <View style={styles.saveButtonContainer}>
-              <TouchableOpacity style={styles.saveButton}>
-                <Text style={styles.saveButtonLabel}>SAVE</Text>
+              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]}>
+                <Text style={CommonStyles.buttonLabel}>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>

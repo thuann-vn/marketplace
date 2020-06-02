@@ -14,6 +14,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CompanySidebar from './includes/companySidebar';
+import { CommonStyles } from '../../constants/Styles';
 
 const COMPANYLIST = [
   {
@@ -68,24 +69,24 @@ export default function CompanyScreen() {
               }}
               ListFooterComponent={() => (
                 <View style={styles.listFooter}>
-                  <TextInput style={[styles.input]} placeholder="Company name"/>
-                  <TextInput style={[styles.input]} placeholder="Company Info"/>
-                  <TextInput style={[styles.input]} placeholder="subsidary yes/no"/>
+                  <TextInput style={CommonStyles.input} placeholder="Company name"/>
+                  <TextInput style={CommonStyles.input} placeholder="Company Info"/>
+                  <TextInput style={CommonStyles.input} placeholder="subsidary yes/no"/>
 
                   <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
 
                   <View style={styles.houseSuiteContainer}>
-                    <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[styles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
-                    <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[styles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
+                    <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
+                    <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
                   </View>
 
-                  <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
 
-                  <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonLabel}>SAVE/UPDATE</Text>
+                  <TouchableOpacity style={CommonStyles.button}>
+                    <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
                   </TouchableOpacity>
                 </View>
               )}

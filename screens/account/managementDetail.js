@@ -13,6 +13,7 @@ import ProfileSidebar from './includes/profileSidebar';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonStyles } from '../../constants/Styles';
 
 const ROLES = [
   {
@@ -73,7 +74,7 @@ export default function ManagementDetailScreen() {
               <Text style={styles.name}>MIKE TAYLOR, Commodity Specialist</Text>
               <View style={[styles.separator, {marginHorizontal: 0, marginBottom: 20}]}></View>
 
-              <TextInput placeholder="mtaylor@themarketspace.co" style={styles.input}/>
+              <TextInput placeholder="mtaylor@themarketspace.co" style={CommonStyles.input}/>
               <View style={styles.roleList}>
                 {
                   ROLES.map((item, index) => (
@@ -81,7 +82,7 @@ export default function ManagementDetailScreen() {
                       title={item.title}
                       checked={item.checked}
                       onPress={() => item.checked = !item.checked}
-                      containerStyle={styles.checkbox}
+                      containerStyle={CommonStyles.checkbox}
                       textStyle={{marginLeft: 0}}
                       checkedColor={Colors.mainColor}
                       wrapperStyle={{ marginHorizontal: 0 }}
@@ -89,11 +90,10 @@ export default function ManagementDetailScreen() {
                     />
                   ))
                 }
-              
               </View>
              
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonLabel}>SUBMIT</Text>
+              <TouchableOpacity style={CommonStyles.button}>
+                <Text style={CommonStyles.buttonLabel}>SUBMIT</Text>
               </TouchableOpacity>
           </View>
         </View>
@@ -134,19 +134,6 @@ const styles = StyleSheet.create({
     borderRightColor: '#ccc',
     borderRightWidth: 1
   },
-  button: {
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    paddingVertical: 5
-  },
-  buttonLabel: {
-    color: '#333',
-    marginLeft: 10,
-    textTransform: 'uppercase',
-    fontWeight: '300'
-  },
   detailContainer: {
     flex: 1,
     padding: 10
@@ -164,15 +151,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
-  button: {
-    backgroundColor: '#666666',
-    padding: 6,
-    paddingHorizontal: 10,
-    marginTop: 20,
-    alignSelf: 'center',
-    width: 80,
-    alignItems: 'center'
-  },
   buttonLabel: {
     color: '#fff',
     textTransform: 'uppercase',
@@ -183,26 +161,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginRight: 10,
     flex: 1
-  },
-
-  input: {
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 5,
-    textAlign: 'center',
-    marginBottom: 5
-  },
-
-  checkbox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: 'transparent',
-    borderWidth: 0,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    paddingLeft: 0,
-    marginLeft: 0,
-    backgroundColor: 'transparent',
   },
 
   dropdown: {

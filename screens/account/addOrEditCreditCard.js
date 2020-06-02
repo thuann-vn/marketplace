@@ -9,6 +9,7 @@ import Colors from '../../constants/Colors';
 import { CheckBox } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonStyles } from '../../constants/Styles';
 
 export default function AddOrEditCreditCardScreen() {
   const [name, setName] = React.useState('');
@@ -32,25 +33,25 @@ export default function AddOrEditCreditCardScreen() {
           <AddCardAndBankSidebar />
 
           <View style={styles.inputContainer}>
-            <TextInput placeholder="NAME ON THE CARD" value={name} onChangeText={setName} style={styles.input} placeholderTextColor="#333" />
+            <TextInput placeholder="NAME ON THE CARD" value={name} onChangeText={setName} style={CommonStyles.input} placeholderTextColor="#333" />
             <View style={styles.cardNoContainer}>
-              <TextInput placeholder="CREDIT CARD" value={cardNo} onChangeText={setCardNo} style={[styles.input, styles.cardNoInput]} placeholderTextColor="#333" />
-              <TextInput placeholder="CVV" value={cvv} onChangeText={setCvv} style={[styles.input, styles.cvvInput]} placeholderTextColor="#333" />
-              <TextInput placeholder="EXP" value={exp} onChangeText={setExp} style={[styles.input, styles.expInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="CREDIT CARD" value={cardNo} onChangeText={setCardNo} style={[CommonStyles.input, styles.cardNoInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="CVV" value={cvv} onChangeText={setCvv} style={[CommonStyles.input, styles.cvvInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="EXP" value={exp} onChangeText={setExp} style={[CommonStyles.input, styles.expInput]} placeholderTextColor="#333" />
             </View>
-            <TextInput placeholder="BILLING ADDRESS" value={billAddress} onChangeText={setBillAddress} style={styles.input} placeholderTextColor="#333" />
+            <TextInput placeholder="BILLING ADDRESS" value={billAddress} onChangeText={setBillAddress} style={CommonStyles.input} placeholderTextColor="#333" />
 
             <View style={styles.saveButtonContainer}>
               <CheckBox
                 title='Default Payment'
                 checked={isDefault}
                 onPress={() => setDefault(!isDefault)}
-                containerStyle={styles.checkbox}
+                containerStyle={CommonStyles.checkbox}
                 checkedColor={Colors.mainColor}
               />
 
-              <TouchableOpacity style={styles.saveButton}>
-                <Text style={styles.saveButtonLabel}>SAVE</Text>
+              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]}>
+                <Text style={CommonStyles.buttonLabel}>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -87,29 +88,9 @@ const styles = StyleSheet.create({
     borderRightColor: '#ccc',
     borderRightWidth: 1
   },
-  button: {
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    paddingVertical: 5
-  },
-  buttonLabel: {
-    color: '#333',
-    marginLeft: 10,
-    textTransform: 'uppercase',
-    fontWeight: '300'
-  },
   inputContainer: {
     flex: 1,
     padding: 10
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#000',
-    padding: 10,
-    textAlign: 'center',
-    marginBottom: 10
   },
   cardNoContainer: {
     flexDirection: 'row',
@@ -126,18 +107,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center'
   },
-  saveButton: {
-    backgroundColor: '#666666',
-    padding: 10,
-    paddingHorizontal: 25,
-    alignSelf: 'center'
-  },
-  saveButtonLabel: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-    fontWeight: '700'
-  },
   defaultCheckbox: {
     width: 20,
     height: 20,
@@ -147,16 +116,5 @@ const styles = StyleSheet.create({
   defaultCheckboxLabel: {
     marginLeft: 10,
     marginRight: 10
-  },
-  checkbox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: 'transparent',
-    borderWidth: 0,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    paddingLeft: 0,
-    marginLeft: 0,
-    backgroundColor: 'transparent'
   },
 });

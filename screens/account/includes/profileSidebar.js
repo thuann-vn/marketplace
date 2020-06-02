@@ -11,7 +11,7 @@ export default function ProfileSidebar() {
 
   return (
     <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.accountSetup)}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.profileEdit)}>
             <MaterialCommunityIcons name="credit-card" size={32} color="#333" />
             <Text style={styles.buttonLabel}>My Profile</Text>
         </TouchableOpacity>

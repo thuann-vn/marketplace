@@ -43,8 +43,8 @@ export default function CompanyDetailScreen() {
               checkedColor={Colors.mainColor}
             />
 
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonLabel}>SAVE/UPDATE</Text>
+            <TouchableOpacity style={CommonStyles.button}>
+              <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -74,37 +74,5 @@ const styles = StyleSheet.create({
   inputContainer:{
     flex: 1,
     paddingHorizontal: 10,
-  },
-  button: {
-    backgroundColor: '#666666',
-    padding: 8,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    marginTop: 20
-  },
-  buttonLabel: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 14,
-    fontWeight: '700'
-  },
-  input: {
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 5,
-    textAlign: 'center',
-    marginBottom: 5,
-    width: '100%'
-  },
-  dropdown: {
-    height: 30,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderColor: '#000',
-    borderWidth: 0.5,
-    borderRadius: 0,
-    textAlign: 'left',
   },
 });

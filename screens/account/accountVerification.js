@@ -9,6 +9,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonStyles } from '../../constants/Styles';
 
 const AUDIT = [
   {
@@ -48,9 +49,9 @@ export default function AccountVerification() {
 
         <View style={styles.inputContainer}>
           <View style={styles.fileBrowser}>
-            <TextInput placeholder="" value={file} onChangeText={setFile} style={[styles.input, styles.fileInput]} placeholderTextColor="#333" />
-            <TouchableOpacity style={styles.button} onPress={_selectFile}>
-              <Text style={styles.buttonLabel}>BROWSE</Text>
+            <TextInput placeholder="" value={file} onChangeText={setFile} style={[CommonStyles.input, styles.fileInput]} placeholderTextColor="#333" />
+            <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]} onPress={_selectFile}>
+              <Text style={CommonStyles.buttonLabel}>BROWSE</Text>
             </TouchableOpacity>
           </View>
           <DropDownPicker
@@ -62,12 +63,12 @@ export default function AccountVerification() {
               { label: 'Tax Certificate', value: '5' },
             ]}
             defaultIndex={0}
-            style={styles.dropdown}
+            style={CommonStyles.dropdown}
             labelStyle={{ textAlign: 'left' }}
             onChangeItem={item => console.log(item.label, item.value)}
           />
-          <TouchableOpacity style={[styles.button, styles.uploadButton]}>
-            <Text style={styles.buttonLabel}>UPLOAD</Text>
+          <TouchableOpacity style={[CommonStyles.button, styles.uploadButton]}>
+            <Text style={CommonStyles.buttonLabel}>UPLOAD</Text>
           </TouchableOpacity>
         </View>
 
@@ -88,10 +89,10 @@ export default function AccountVerification() {
           />
 
           <View style={styles.commentContainer}>
-            <TextInput placeholder="COMMENT TEXT BOX" value={comment} onChangeText={setComment} style={[styles.input, styles.commentInput]} multiline={true} placeholderTextColor="#333" />
+            <TextInput placeholder="COMMENT TEXT BOX" value={comment} onChangeText={setComment} style={[CommonStyles.input, styles.commentInput]} multiline={true} placeholderTextColor="#333" />
 
-            <TouchableOpacity style={[styles.button, styles.commentButton]}>
-              <Text style={styles.buttonLabel}>POST</Text>
+            <TouchableOpacity style={[CommonStyles.button, styles.commentButton]}>
+              <Text style={CommonStyles.buttonLabel}>POST</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -120,43 +121,16 @@ const styles = StyleSheet.create({
   },
   fileInput: {
     flex: 1,
-    marginRight: 10
+    marginRight: 10,
+    height: 34
   },
   inputContainer: {
     flex: 1,
     padding: 20,
     paddingHorizontal: 20
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#000',
-    padding: 10,
-    marginBottom: 10
-  },
-  button: {
-    backgroundColor: '#666666',
-    padding: 10,
-    paddingHorizontal: 25,
-    alignSelf: 'center'
-  },
   uploadButton: {
     marginTop: 20
-  },
-  buttonLabel: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-    fontWeight: '700'
-  },
-  dropdown: {
-    height: 40,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderColor: '#000',
-    borderRadius: 0,
-    textAlign: 'left',
   },
   auditContainer: {
     paddingHorizontal: 20
@@ -178,9 +152,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  commentButton:{
+    marginTop: 0
+  },
   commentInput: {
     flex: 1,
     marginRight: 10,
-    minHeight: 100
+    minHeight: 100,
+    textAlign: 'left'
   }
 });

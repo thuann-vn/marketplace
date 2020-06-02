@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
 import Layout from '../../constants/Layout';
-import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Routes } from '../../constants/Routes';
 
 export default function Profile({ navigation: { navigate } }) {
@@ -35,15 +34,15 @@ export default function Profile({ navigation: { navigate } }) {
             <Text style={styles.buttonLabel}>Account Setup</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.accountVerify)}>
             <MaterialCommunityIcons name="account-check-outline" size={32} color="#333" />
             <Text style={styles.buttonLabel}>Verify Credentials</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.accountManagement)}>
             <MaterialIcons name="person" size={32} color="#333" />
             <Text style={styles.buttonLabel}>Users</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.company)}>
             <MaterialCommunityIcons name="office-building" size={32} color="#333" />
             <Text style={styles.buttonLabel}>Company</Text>
           </TouchableOpacity>
@@ -51,6 +50,7 @@ export default function Profile({ navigation: { navigate } }) {
             <MaterialCommunityIcons name="medal" size={32} color="#333" />
             <Text style={styles.buttonLabel}>My Rewards</Text>
           </TouchableOpacity>
+
         </View>
         <View>
           <TouchableOpacity style={styles.button}>

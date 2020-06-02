@@ -13,6 +13,7 @@ import ProfileSidebar from './includes/profileSidebar';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CommonStyles } from '../../constants/Styles';
 
 export default function ProfileEditScreen() {
   const [firstName, setFirstName] = React.useState('');
@@ -65,14 +66,14 @@ export default function ProfileEditScreen() {
             <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
 
             <View style={styles.houseSuiteContainer}>
-              <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[styles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
-              <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[styles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
+              <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
+              <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
             </View>
 
-            <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
             <View style={styles.saveButtonContainer}>
               <TouchableOpacity style={styles.saveButton}>
                 <Text style={styles.saveButtonLabel}>SAVE/UPDATE</Text>

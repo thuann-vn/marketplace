@@ -10,6 +10,7 @@ import ProfileSidebar from './includes/profileSidebar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
+import { Routes } from '../../constants/Routes';
 
 const APPROVELIST = [
   {
@@ -41,7 +42,7 @@ const APPROVELIST = [
  
 ]
 
-export default function ManagementScreen() {
+export default function ManagementScreen(props) {
   const [] = React.useState('');
   const [] = React.useState('');
   const [] = React.useState('');
@@ -75,7 +76,7 @@ export default function ManagementScreen() {
                     <Text>{item.name}</Text>
                   </View>
                   <View style={styles.column}>
-                    <TouchableOpacity><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=> props.navigation.navigate(Routes.accountManagementDetail)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
                   </View>
                   <TouchableOpacity style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
@@ -204,18 +205,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginRight: 10,
     flex: 1
-  },
-
-  dropdown: {
-    height: 30,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderColor: '#000',
-    borderWidth: 0.5,
-    borderRadius: 0,
-    textAlign: 'left',
   },
   editButton: {
     right: 0,

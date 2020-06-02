@@ -1,5 +1,5 @@
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet} from 'react-native';
 export const CommonStyles = StyleSheet.create({
     button: {
       backgroundColor: '#666666',
@@ -19,8 +19,7 @@ export const CommonStyles = StyleSheet.create({
       borderColor: '#000',
       padding: 5,
       textAlign: 'center',
-      marginBottom: 5,
-      width: '100%'
+      marginBottom: 5
     },
     dropdown: {
       height: 30,
