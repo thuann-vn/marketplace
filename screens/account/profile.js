@@ -51,7 +51,6 @@ export default function Profile({ navigation: { navigate } }) {
             <MaterialCommunityIcons name="medal" size={32} color="#333" />
             <Text style={styles.buttonLabel}>My Rewards</Text>
           </TouchableOpacity>
-
         </View>
         <View>
           <TouchableOpacity style={styles.button}>

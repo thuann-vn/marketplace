@@ -1,53 +1,38 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SectionList } from 'react-native';
-import { TouchableOpacity, TextInput } from 'react-native-gesture-handler';
+import { Platform, StyleSheet, View, Text, SectionList } from 'react-native';
+import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { CheckBox } from 'react-native-elements';
+import Colors from '../../constants/Colors';
+import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 import ProfileProgressBar from './includes/profileProgressBar';
 import ProfileSidebar from './includes/profileSidebar';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { CommonStyles } from '../../constants/Styles';
+import CompanySidebar from './includes/companySidebar';
 
-const APPROVELIST = [
+const COMPANYLIST = [
   {
-    title: 'My pending approvals',
-    data: [
-      {
-        id: 1,
-        name: 'John Stewart'
-      },
-      {
-        id: 1,
-        name: 'Mike Taylor'
-      },
-    ]
+    id: 1,
+    name: 'Test LLC'
   },
   {
-    title: 'Approved users',
-    data: [
-      {
-        id: 1,
-        name: 'John Stewart'
-      },
-      {
-        id: 1,
-        name: 'Mike Taylor'
-      },
-    ]
-  }
- 
+    id: 1,
+    name: 'Test LLC 2'
+  },
 ]
 
-export default function ManagementScreen() {
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState(false);
-  const [] = React.useState(false);
+export default function CompanyScreen() {
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [role, setRole] = React.useState('');
+  const [isSelected, setSelection] = React.useState(false);
+  const [editable, setEditable] = React.useState(false);
 
 
   return (
@@ -62,13 +47,12 @@ export default function ManagementScreen() {
         <ProfileProgressBar />
         <View style={styles.separator}></View>
         <View style={styles.listContainer}>
-          <ProfileSidebar />
+          <CompanySidebar />
 
           <View style={styles.listApprovalContainer}>
-            <SectionList
-              sections={APPROVELIST}
+            <FlatList
+              data={COMPANYLIST}
               keyExtractor={(item, index) => 'approve_' + index}
-              renderSectionHeader={({section}) => (<Text style={styles.title}>{section.title}</Text>)}
               renderItem={({item}) => {
                 return (<View style={styles.row}>
                   <View style={[styles.column, {flex: 1}]}>
@@ -84,29 +68,25 @@ export default function ManagementScreen() {
               }}
               ListFooterComponent={() => (
                 <View style={styles.listFooter}>
-                  <View style={styles.contentSeparator}></View>
-                  <Text style={styles.title}>Invite User</Text>
-                  <View style={styles.inviteContainer}>
-                    <TextInput style={[CommonStyles.input, styles.inviteInput]} placeholder="USER NAME"/>
-                    <TouchableOpacity style={styles.inviteButton}><Text style={styles.inviteButtonLabel}>INVITE</Text></TouchableOpacity>
+                  <TextInput style={[styles.input]} placeholder="Company name"/>
+                  <TextInput style={[styles.input]} placeholder="Company Info"/>
+                  <TextInput style={[styles.input]} placeholder="subsidary yes/no"/>
+
+                  <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
+
+                  <View style={styles.houseSuiteContainer}>
+                    <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[styles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
+                    <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[styles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
                   </View>
 
+                  <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
 
-                  <View style={styles.contentSeparator}></View>
-                  <Text style={styles.title}>Join Company</Text>
-                  <View style={styles.inviteContainer}>
-                    <TextInput style={[CommonStyles.input, styles.inviteInput]} placeholder="COST CODE"/>
-                    <TouchableOpacity style={styles.inviteButton}><Text style={styles.inviteButtonLabel}>JOIN</Text></TouchableOpacity>
-                  </View>
-
-
-                  <View style={styles.contentSeparator}></View>
-                  <Text style={styles.title}>Add Anonymous Users</Text>
-                  <View style={styles.inviteContainer}>
-                    <TextInput style={[CommonStyles.input, styles.inviteInput]} placeholder="0"/>
-                    <TouchableOpacity style={styles.inviteButton}><Text style={styles.inviteButtonLabel}>UPDATE</Text></TouchableOpacity>
-                  </View>
-
+                  <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonLabel}>SAVE/UPDATE</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             />
@@ -151,21 +131,28 @@ const styles = StyleSheet.create({
     borderRightWidth: 1
   },
   button: {
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    paddingVertical: 5
+    backgroundColor: '#666666',
+    padding: 8,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    marginTop: 20
   },
   buttonLabel: {
-    color: '#333',
-    marginLeft: 10,
+    color: '#fff',
     textTransform: 'uppercase',
-    fontWeight: '300'
+    fontSize: 14,
+    fontWeight: '700'
   },
   listApprovalContainer: {
     flex: 1,
     padding: 10
+  },
+  input: {
+    borderWidth: 0.5,
+    borderColor: '#000',
+    padding: 5,
+    textAlign: 'center',
+    marginBottom: 5
   },
   cardNoContainer: {
     flexDirection: 'row',
@@ -205,6 +192,26 @@ const styles = StyleSheet.create({
     marginRight: 10,
     flex: 1
   },
+  defaultCheckbox: {
+    width: 20,
+    height: 20,
+    borderColor: '#ccc'
+  },
+  defaultCheckboxLabel: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: 'transparent',
+    borderWidth: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    paddingLeft: 0,
+    marginLeft: 0,
+    backgroundColor: 'transparent'
+  },
 
   dropdown: {
     height: 30,
@@ -226,6 +233,12 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 5,
     marginBottom: 5,
+    fontWeight: '600'
+  },
+  addressTitle:{
+    marginBottom: 10,
+    marginTop: 10,
+    textAlign: 'center',
     fontWeight: '600'
   },
   houseSuiteContainer: {

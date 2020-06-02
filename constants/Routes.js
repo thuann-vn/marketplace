@@ -7,5 +7,7 @@ export const Routes = {
     'accountVerify' : 'ACCOUNT_VERIFY',
     'profileEdit' : 'PROFILE_EDIT',
     'accountManagement': 'ACCOUNT_MANAGEMENT',
-    'accountManagementDetail': 'ACCOUNT_MANAGEMENT_DETAIL'
+    'accountManagementDetail': 'ACCOUNT_MANAGEMENT_DETAIL',
+    'company': 'COMPANY',
+    'companyDetail': 'COMPANY_DETAIL'
 }

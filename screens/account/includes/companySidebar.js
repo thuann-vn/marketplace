@@ -2,22 +2,22 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../../constants/Routes';
 
-export default function ProfileSidebar() {
+export default function CompanySidebar() {
     const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.accountSetup)}>
-            <MaterialCommunityIcons name="credit-card" size={32} color="#333" />
-            <Text style={styles.buttonLabel}>My Profile</Text>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.company)}>
+            <MaterialCommunityIcons name="office-building" size={32} color="#333" />
+            <Text style={styles.buttonLabel}>My Company</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.accountManagement)}>
-            <MaterialCommunityIcons name="bank" size={32} color="#333" />
-            <Text style={styles.buttonLabel}>Management</Text>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.companyDetail)}>
+            <MaterialIcons name="add-circle-outline" size={32} color="#333" />
+            <Text style={styles.buttonLabel}>Add Company</Text>
         </TouchableOpacity>
     </View>
   );
