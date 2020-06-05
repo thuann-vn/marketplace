@@ -6,8 +6,11 @@ import Colors from '../../constants/Colors';
 import {
 	KeyboardAwareScrollView
 } from 'react-native-keyboard-aware-scroll-view';
-import { validateEmail } from '../../utils/commonUtil';
+import { validateEmail, validatePassword } from '../../utils/commonUtil';
 import { AuthContext } from '../../context/auth';
+import { AuthService } from '../../services/auth';
+import { Alert } from 'react-native';
+import { Input } from 'react-native-elements';
 
 export default class RegisterScreen extends React.Component {
   static contextType = AuthContext;
@@ -15,7 +18,11 @@ export default class RegisterScreen extends React.Component {
     super(props);
 
     this.state={
-
+      // firstName: 'Thua',
+      // familyName: 'Nguyen',
+      email: 'ngocthua92@live.com',
+      password: 'NgocThua92!',
+      role: 'BUYER'
     }
   }
 
@@ -47,16 +54,49 @@ export default class RegisterScreen extends React.Component {
 			this.setState({
 				email_error: 'Email format invalid.'
 			})
-		}
+    }
+    
+		if(isValid){
+      var passwordValid = validatePassword(this.state.password);
+      if(passwordValid != true){
+        isValid = false;
+        this.setState({
+          password_error: passwordValid
+        })
+      }
+    }
+    
 		return isValid;
 	}
 
 
   _submit = ()=>{
-    this.context.signIn();
+    const {firstName, familyName, email, password, role} = this.state;
     if(this._validate()){
-      this.props.navigation.navigate('Main');
+      AuthService.register({
+        firstName, familyName, email, password, role
+      }).then(result => {
+        console.log(result);
+        if(result.status == 'fail'){
+          Alert.alert(result.msg);
+        }else{
+          AuthService.login(email, password).then((result) => {
+            console.log(result);
+            this.context.signIn();
+          })
+        }
+      })
     }
+
+    AuthService.login(email, password).then((result) => {
+      if(result.status == 'success'){
+        console.log('AHIHI, LOGIN',result);
+        const {Users, token} = result.payload; 
+        console.log(result, Users, token);
+        this.context.signIn(Users, token);
+      }
+    })
+    return;
   }
 
   render(){
@@ -104,6 +144,7 @@ export default class RegisterScreen extends React.Component {
                   placeholder="Email" 
                   keyboardType="email-address" 
                   returnKeyType="next" 
+                  value={this.state.email}
                   ref={(input) => { this.emailInput = input; }} 
                   onSubmitEditing={() => this.passwordInput.focus()} 
                   onChangeText={(text) => this.setState({email: text})}
@@ -115,6 +156,7 @@ export default class RegisterScreen extends React.Component {
                   placeholder="Password" 
                   secureTextEntry={true} 
                   returnKeyType="done" 
+                  value={this.state.password}
                   ref={(input) => { this.passwordInput = input; }} 
                   onSubmitEditing={this._submit} 
                   onChangeText={(text) => this.setState({password: text})}

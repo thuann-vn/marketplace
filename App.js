@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
 
 import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
@@ -32,12 +32,14 @@ export default function App(props) {
           return {
             ...prevState,
             userToken: action.token,
+            userInfo: action.user,
             isLoading: false,
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignout: false,
+            userInfo: action.user,
             userToken: action.token,
           };
         case 'SIGN_OUT':
@@ -45,6 +47,7 @@ export default function App(props) {
             ...prevState,
             isSignout: true,
             userToken: null,
+            userInfo: null,
           };
       }
     },
@@ -52,25 +55,24 @@ export default function App(props) {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      userInfo: null,
     }
   );
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken, userInfo;
 
       try {
         userToken = await AsyncStorage.getItem('userToken');
+        userInfo = await AsyncStorage.getItem('userInfo');
       } catch (e) {
         // Restoring token failed
       }
 
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken, user: JSON.parse(userInfo) });
     };
 
     bootstrapAsync();
@@ -79,22 +81,25 @@ export default function App(props) {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+      signIn: async (userData, token) => {
+        try {
+          await AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+          await AsyncStorage.setItem('userToken', token);
+        } catch (e) {
+          console.log('Sign in context failed');
+        }
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: 'SIGN_IN', token: token, user: userData});
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async data => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+      signOut: async () => {
+        try {
+          await AsyncStorage.removeItem('userInfo');
+          await AsyncStorage.removeItem('userToken');
+        } catch (e) {
+          console.log('Logout context failed');
+        }
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: 'SIGN_OUT' })
       },
     }),
     []

@@ -8,6 +8,7 @@ import { withNavigation } from '@react-navigation/compat';
 import Colors from '../constants/Colors';
 import { AuthContext } from '../context/auth';
 import { Routes } from '../constants/Routes';
+import { AuthService } from '../services/auth';
 
 class CustomHeader extends React.Component {
   constructor(props){
@@ -29,7 +30,9 @@ class CustomHeader extends React.Component {
 
   _logout = () => {
     this._accountSettingToggle();
-    this.context.signOut();
+    AuthService.logout().then(()=>{
+      this.context.signOut();
+    })
   }
 
   render(){
