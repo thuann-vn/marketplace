@@ -64,8 +64,7 @@ export default function ManagementDetailScreen() {
         enableOnAndroid={true}
         keyboardShouldPersistTaps='handled'
       >
-        <ProfileName hideTitle />
-        <ProfileProgressBar />
+        <ProfileName hideTitle showProgressbar/>
         <View style={styles.separator}></View>
         <View style={styles.listContainer}>
           <ProfileSidebar />

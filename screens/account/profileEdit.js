@@ -33,8 +33,7 @@ export default function ProfileEditScreen() {
         enableOnAndroid={true}
         keyboardShouldPersistTaps='handled'
       >
-        <ProfileName hideTitle />
-        <ProfileProgressBar />
+        <ProfileName hideTitle showProgressbar/>
         <View style={styles.separator}></View>
         <View style={styles.listContainer}>
           <ProfileSidebar />
@@ -42,7 +41,6 @@ export default function ProfileEditScreen() {
             <TouchableOpacity onPress={() => setEditable(!editable)} style={styles.editButton}>
               <Text>Edit</Text>
             </TouchableOpacity>
-
             <TextInput placeholder="FIRST NAME" value={firstName} onChangeText={setFirstName} style={styles.input} placeholderTextColor="#333" editable={editable} />
             <TextInput placeholder="LAST NAME" value={lastName} onChangeText={setLastName} style={styles.input} placeholderTextColor="#333" editable={editable} />
             <TextInput placeholder="MOBILE NUMBER" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />

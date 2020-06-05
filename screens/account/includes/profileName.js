@@ -5,15 +5,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../../constants/Routes';
+import { useSelector, useDispatch } from 'react-redux';
+import ProfileProgressBar from './profileProgressBar';
 
 export default function ProfileName(props) {
-  const settings = useSelector(state => state.settings)
-  const dispatch = useDispatch();
-  console.log(settings);
-  
+  const settings = useSelector(state => state.settings);
+  const userName = settings.userInfo && (settings.userInfo.firstName || settings.userInfo.lastName) ? settings.userInfo.firstName + ' ' + settings.userInfo.lastName : '';
   return (
     <View style={styles.container}>
-        <Text style={styles.profileName}>Thua Nguyen</Text>
+        <Text style={styles.profileName}>{userName ? userName : 'User name'}</Text>
         {
             !props.hideTitle && (
                 <View style={styles.titleContainer}>
@@ -21,7 +21,12 @@ export default function ProfileName(props) {
                 </View>
             )
         }
-       
+
+        {
+          props.showProgressbar && (
+            <ProfileProgressBar/>
+          )
+        }
     </View>
   );
 }

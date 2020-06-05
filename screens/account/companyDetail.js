@@ -26,8 +26,7 @@ export default function CompanyDetailScreen() {
         enableOnAndroid={true}
         keyboardShouldPersistTaps='handled'
       >
-        <ProfileName hideTitle />
-        <ProfileProgressBar />
+        <ProfileName hideTitle showProgressbar/>
         <View style={styles.separator}></View>
         <View style={styles.contentContainer}>
           <CompanySidebar />

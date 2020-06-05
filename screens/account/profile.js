@@ -6,26 +6,14 @@ import CustomHeader from '../../components/CustomHeader';
 import Layout from '../../constants/Layout';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Routes } from '../../constants/Routes';
+import ProfileName from './includes/profileName';
+import ProfileProgressBar from './includes/profileProgressBar';
 
 export default function Profile({ navigation: { navigate } }) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
       <CustomHeader />
-
-      <Text style={styles.titleText}>Thua Nguyen</Text>
-      <View style={styles.profileCompleteContainer}>
-        <Text style={styles.text}>Your profile is complete.</Text>
-
-        <View style={styles.completeBarContainer}>
-          <View style={styles.completeBar}></View>
-          <View style={styles.completeBar}></View>
-          <View style={styles.completeBar}></View>
-          <View style={[styles.completeBar, styles.completeRedBar]}></View>
-          <View style={[styles.completeBar, styles.completeRedBar]}></View>
-
-          <TouchableOpacity style={styles.updateProfileButton}><Text style={styles.updateProfileText}>Update</Text></TouchableOpacity>
-        </View>
-      </View>
+      <ProfileName hideTitle={true} showProgressbar={true}/>
       <View style={styles.separator}></View>
       <View style={styles.buttonListContainer}>
         <View>
