@@ -20,16 +20,16 @@ export default class RegisterScreen extends React.Component {
     this.state={
       // firstName: 'Thua',
       // familyName: 'Nguyen',
-      email: 'ngocthua92@live.com',
-      password: 'NgocThua92!',
+      // email: 'ngocthua92@live.com',
+      // password: 'NgocThua92!',
       role: 'BUYER'
     }
   }
 
 	_validate = ()=>{
     const requiredFields = [
-      { key: 'firstName', label: 'First name' },
-      { key: 'familyName', label: 'Family name' },
+      // { key: 'firstName', label: 'First name' },
+      // { key: 'familyName', label: 'Family name' },
       { key: 'email', label: 'Email' },
       { key: 'password', label: 'Password' },
     ];

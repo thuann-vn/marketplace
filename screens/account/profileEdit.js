@@ -14,6 +14,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
+import { AccountService } from '../../services/account';
 
 export default function ProfileEditScreen() {
   const [firstName, setFirstName] = React.useState('');
@@ -22,7 +23,47 @@ export default function ProfileEditScreen() {
   const [role, setRole] = React.useState('');
   const [isSelected, setSelection] = React.useState(false);
   const [editable, setEditable] = React.useState(false);
+  
+  const [house, setHouse] = React.useState(false);
+  const [suite, setSuite] = React.useState(false);
+  const [street, setStreet] = React.useState(false);
+  const [state, setState] = React.useState(false);
+  const [country, setCountry] = React.useState(false);
+  const [zip, setZip] = React.useState(false);
 
+  React.useEffect(()=>{
+    AccountService.getProfile().then(response => {
+      if(response.status == 'success'){
+        if(response.payload.id.length == 1){
+          const user = response.payload.id[0];
+          setEditable(false);
+          setFirstName(user.firstName);
+          setLastName(user.lastName);
+          setPhoneNumber(user.mobileNo);
+          setRole(user.role);
+  
+          setHouse(user.house);
+          setSuite(user.suite);
+          setStreet(user.street);
+          setState(user.state);
+          setCountry(user.state);
+          setZip(user.zip);
+        }
+      }
+    });
+  }, [])
+
+  const firstNameInput = React.useRef(null);
+  const setEditOn = () =>{
+    setEditable(!editable);
+    setTimeout(()=>{
+      firstNameInput.current.focus();
+    })
+  }
+
+  const submit = () =>{
+    
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,10 +79,15 @@ export default function ProfileEditScreen() {
         <View style={styles.listContainer}>
           <ProfileSidebar />
           <View style={styles.inputContainer}>
-            <TouchableOpacity onPress={() => setEditable(!editable)} style={styles.editButton}>
-              <Text>Edit</Text>
-            </TouchableOpacity>
-            <TextInput placeholder="FIRST NAME" value={firstName} onChangeText={setFirstName} style={styles.input} placeholderTextColor="#333" editable={editable} />
+            {
+              !editable && (
+                <TouchableOpacity onPress={setEditOn} style={styles.editButton}>
+                    <Text>Edit</Text>
+                </TouchableOpacity>
+              )
+            }
+            
+            <TextInput placeholder="FIRST NAME" value={firstName} onChangeText={setFirstName} style={styles.input} placeholderTextColor="#333" editable={editable} ref={firstNameInput}/>
             <TextInput placeholder="LAST NAME" value={lastName} onChangeText={setLastName} style={styles.input} placeholderTextColor="#333" editable={editable} />
             <TextInput placeholder="MOBILE NUMBER" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
 
@@ -64,19 +110,23 @@ export default function ProfileEditScreen() {
             <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
 
             <View style={styles.houseSuiteContainer}>
-              <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
-              <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
+              <TextInput placeholder="HOUSE" value={house} onChangeText={setHouse} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
+              <TextInput placeholder="SUITE" value={suite} onChangeText={setSuite} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
             </View>
 
-            <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-            <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-            <View style={styles.saveButtonContainer}>
-              <TouchableOpacity style={styles.saveButton}>
-                <Text style={styles.saveButtonLabel}>SAVE/UPDATE</Text>
-              </TouchableOpacity>
-            </View>
+            <TextInput placeholder="STREET" value={street} onChangeText={setStreet} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="STATE" value={state} onChangeText={setState} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="COUNTRY" value={country} onChangeText={setCountry} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+            {
+              editable && (
+                <View style={styles.saveButtonContainer}>
+                  <TouchableOpacity style={styles.saveButton} onPress={submit}>
+                    <Text style={styles.saveButtonLabel}>SAVE/UPDATE</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }
           </View>
         </View>
       </KeyboardAwareScrollView>
