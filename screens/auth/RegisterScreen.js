@@ -81,7 +81,6 @@ export default class RegisterScreen extends React.Component {
           Alert.alert(result.msg);
         }else{
           AuthService.login(email, password).then((result) => {
-            console.log(result);
             this.context.signIn();
           })
         }
@@ -90,9 +89,7 @@ export default class RegisterScreen extends React.Component {
 
     AuthService.login(email, password).then((result) => {
       if(result.status == 'success'){
-        console.log('AHIHI, LOGIN',result);
         const {Users, token} = result.payload; 
-        console.log(result, Users, token);
         this.context.signIn(Users, token);
       }
     })

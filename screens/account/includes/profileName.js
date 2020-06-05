@@ -7,6 +7,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../../constants/Routes';
 
 export default function ProfileName(props) {
+  const settings = useSelector(state => state.settings)
+  const dispatch = useDispatch();
+  console.log(settings);
+  
   return (
     <View style={styles.container}>
         <Text style={styles.profileName}>Thua Nguyen</Text>
