@@ -7,4 +7,7 @@ export const AccountService = {
     updateProfile: (data)=>{
         return api.call('/api/v1/users/update', data, 'POST');
     },
+    getAccounts: () => {
+        return api.call('/api/v1/users/0/0');
+    }
 }

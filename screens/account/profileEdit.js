@@ -15,13 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
 import { AccountService } from '../../services/account';
+import { useSelector } from 'react-redux';
 
 export default function ProfileEditScreen() {
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [role, setRole] = React.useState('');
-  const [isSelected, setSelection] = React.useState(false);
   const [editable, setEditable] = React.useState(false);
   
   const [house, setHouse] = React.useState(false);
@@ -30,6 +30,9 @@ export default function ProfileEditScreen() {
   const [state, setState] = React.useState(false);
   const [country, setCountry] = React.useState(false);
   const [zip, setZip] = React.useState(false);
+
+  const settings = useSelector(state => state.settings);
+  console.log(settings);
 
   React.useEffect(()=>{
     AccountService.getProfile().then(response => {
@@ -62,7 +65,15 @@ export default function ProfileEditScreen() {
   }
 
   const submit = () =>{
+    const updateData = {
+      email: settings.userInfo.email,
+      password: settings.userInfo.password,
+      firstName, lastName,mobileNo: phoneNumber, house, suite, street, state,  zip
+    }
     
+    AccountService.updateProfile(updateData).then(response => {
+      console.log(response);
+    });
   }
 
   return (

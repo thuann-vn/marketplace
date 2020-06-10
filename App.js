@@ -116,8 +116,8 @@ export default function App(props) {
                         ) : (
                         <Stack.Navigator>
                           {/* <Stack.Screen name="Main" component={BottomTabNavigator} /> */}
-                          <Stack.Screen name={Routes.profileEdit} component={ProfileEditScreen}  options={Layout.defaultHeaderConfig}/>
                           <Stack.Screen name={Routes.settings} component={ProfileScreen}  options={Layout.defaultHeaderConfig}/>
+                          <Stack.Screen name={Routes.profileEdit} component={ProfileEditScreen}  options={Layout.defaultHeaderConfig}/>
                           <Stack.Screen name={Routes.accountSetup} component={AccountSetupScreen}  options={Layout.defaultHeaderConfig}/>
                           <Stack.Screen name={Routes.addOrEditBank} component={AddOrEditBankScreen}  options={Layout.defaultHeaderConfig}/>
                           <Stack.Screen name={Routes.addOrEditCard} component={AddOrEditCreditCardScreen}  options={Layout.defaultHeaderConfig}/>

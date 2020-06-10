@@ -59,10 +59,9 @@ export default class LoginScreen extends React.Component {
     const { email, password} = this.state;
     if(this._validate()){
       AuthService.login(email, password).then((result) => {
-        console.log(result);
         if(result.status == 'success'){
           const {Users, token} = result.payload; 
-          this.context.signIn(Users, token);
+          this.context.signIn({...Users, email, password}, token);
         }else{
           Alert.alert(result.msg);
         }

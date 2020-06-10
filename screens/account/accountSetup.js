@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Routes } from '../../constants/Routes';
 import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
+import { AccountService } from '../../services/account';
 
 const DATA = [
   {
@@ -26,6 +27,16 @@ const DATA = [
 
 export default function AccountSetupScreen() {
   const navigation = useNavigation();
+  const [accounts, setAccounts] = React.useState(DATA);
+
+  React.useEffect(()=>{
+    AccountService.getAccounts().then(response => {
+      if(response.status == 'success'){
+        
+      }
+    });
+  }, [])
+
 
   const _renderItems = ({ item }) => {
     return (
@@ -55,7 +66,7 @@ export default function AccountSetupScreen() {
       <View style={styles.listContainer}>
         <AddCardAndBankSidebar />
         <FlatList
-          data={DATA}
+          data={accounts}
           renderItem={_renderItems}
           keyExtractor={(item, index) => 'item_' + index}
         />
