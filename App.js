@@ -25,6 +25,7 @@ import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import settingsReducer from './store/reducers/settingsReducer';
 import { LOGIN, LOGOUT, login, logout } from './store/actions/settingsActions';
+import LoginScreen from './screens/auth/LoginScreen';
 
 const Stack = createStackNavigator();
 export default function App(props) {
@@ -109,6 +110,7 @@ export default function App(props) {
                       <NavigationContainer linking={LinkingConfiguration}>
                         {!isLoggedIn ? (
                         <Stack.Navigator>
+                          <Stack.Screen name={Routes.login} component={LoginScreen} options={Layout.defaultHeaderConfig}/>
                           <Stack.Screen name={Routes.auth} component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
                         </Stack.Navigator>
                         ) : (

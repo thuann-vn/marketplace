@@ -1,5 +1,6 @@
 export const Routes = {
     'auth' : 'AUTH',
+    'login' : 'LOGIN',
     'settings' : 'SETTINGS',
     'accountSetup' : 'ACCOUNT_SETUP',
     'addOrEditCard' : 'ADD_OR_EDIT_CARD',
