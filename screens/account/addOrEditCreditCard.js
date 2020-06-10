@@ -10,14 +10,100 @@ import { CheckBox } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
+import { AccountService } from '../../services/account';
+import Constants from '../../constants/Constants';
+import { useNavigation } from '@react-navigation/native';
+import { Routes } from '../../constants/Routes';
 
-export default function AddOrEditCreditCardScreen() {
+export default function AddOrEditCreditCardScreen({ navigation, route }) {
   const [name, setName] = React.useState('');
   const [cardNo, setCardNo] = React.useState('');
   const [cvv, setCvv] = React.useState('');
   const [exp, setExp] = React.useState('');
   const [billAddress, setBillAddress] = React.useState('');
   const [isDefault, setDefault] = React.useState(false);
+
+  const id = route.params?.id ? route.params?.id : 0;
+
+  //Get data
+  React.useEffect(()=>{
+    if(id > 0){
+      AccountService.getAccounts(id).then(response => {
+        if(response.status == 'success'){
+          const data = response.payload[0];
+          setName(data.name);
+          setRoutingNumber(data.accountNumber);
+          setAccountNumber(data.routingNumber);
+          setDefault(data.default == 'yes');
+        }
+      });
+    }
+  }, []);
+
+
+	const _validate = ()=>{
+    var errors = [];
+    var isValid = true;
+    
+    if(!name){
+      var isValid = false;
+      errors.push('Name On The Card is required');
+    }
+    
+    if(!cardNo){
+      var isValid = false;
+      errors.push('Card No is required');
+    }
+    
+    if(!cvv){
+      var isValid = false;
+      errors.push('CVV is required');
+    }
+
+    if(!exp){
+      var isValid = false;
+      errors.push('EXP is required');
+    }
+
+    if(!billAddress){
+      var isValid = false;
+      errors.push('Billing Address is required');
+    }
+    
+    if(!isValid && errors.length){
+      Alert.alert(errors[0]);
+    }
+    
+		return isValid;
+	}
+
+
+  const submit = ()=>{
+    if(_validate()){
+      AccountService.addOrEditAccount({
+        name: name,
+        accountNumber: cardNo,
+        routingNumber: routingNumber,
+        type: Constants.accountTypes.credit,
+        default: isDefault ? 'yes' : 'no',
+        mode: '1',
+        city: '1',
+        state: '1',
+        country: '1',
+        zip: '1',
+        id: id
+      }).then(response =>{
+        console.log(response);
+        if(response.status == 'success'){
+          navigation.navigate(Routes.accountSetup);
+        }else{
+          if(Array.isArray(response.msg) && response.msg.length){
+            return Alert.alert(response.msg[0]);
+          }
+        }
+      })
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container} >

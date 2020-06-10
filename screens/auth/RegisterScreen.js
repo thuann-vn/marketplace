@@ -33,37 +33,33 @@ export default class RegisterScreen extends React.Component {
       { key: 'email', label: 'Email' },
       { key: 'password', label: 'Password' },
     ];
+
+    var errors = [];
 		var isValid = true;
 
 		requiredFields.map((field) => {
       const {key, label} = field;
 			if (!this.state[key]){
-				isValid = false;
-				this.setState({
-					[key + '_error']: label + ' is required'
-				})
-			}else{
-				this.setState({
-					[key + '_error']: null
-				})
+        isValid = false;
+        errors.push(label + ' is required');
 			}
     })
     
 		if(isValid && this.state.email && !validateEmail(this.state.email)){
 			isValid = false;
-			this.setState({
-				email_error: 'Email format invalid.'
-			})
+      errors.push('Email format invalid.');
     }
     
 		if(isValid){
       var passwordValid = validatePassword(this.state.password);
       if(passwordValid != true){
         isValid = false;
-        this.setState({
-          password_error: passwordValid
-        })
+        errors.push(passwordValid);
       }
+    }
+
+    if(!isValid && errors.length){
+      Alert.alert(errors[0])
     }
     
 		return isValid;

@@ -28,27 +28,24 @@ export default class LoginScreen extends React.Component {
       { key: 'email', label: 'Email' },
       { key: 'password', label: 'Password' },
     ];
+    var errors = [];
 		var isValid = true;
 
 		requiredFields.map((field) => {
       const {key, label} = field;
 			if (!this.state[key]){
-				isValid = false;
-				this.setState({
-					[key + '_error']: label + ' is required'
-				})
-			}else{
-				this.setState({
-					[key + '_error']: null
-				})
+        isValid = false;
+        errors.push(label + ' is required');
 			}
     })
     
 		if(isValid && this.state.email && !validateEmail(this.state.email)){
 			isValid = false;
-			this.setState({
-				email_error: 'Email format invalid.'
-			})
+      errors.push('Email format invalid.');
+    }
+
+    if(!isValid && errors.length){
+      Alert.alert(errors[0])
     }
     
 		return isValid;

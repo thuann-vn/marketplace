@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -9,48 +9,59 @@ import { Routes } from '../../constants/Routes';
 import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 import { AccountService } from '../../services/account';
-
-const DATA = [
-  {
-    cardNo: '354466662345',
-    cardName: 'Bhavin Rajpara',
-    type: 'Credit Card',
-    isDefault: true,
-  },
-  {
-    cardNo: '354466662345',
-    cardName: 'Bhavin Rajpara',
-    type: 'Checking',
-    isDefault: true,
-  }
-];
+import Constants from '../../constants/Constants';
 
 export default function AccountSetupScreen() {
   const navigation = useNavigation();
-  const [accounts, setAccounts] = React.useState(DATA);
+  const [accounts, setAccounts] = React.useState([]);
 
   React.useEffect(()=>{
     AccountService.getAccounts().then(response => {
+      console.log(response);
       if(response.status == 'success'){
-        
+        setAccounts(response.payload);
       }
     });
-  }, [])
+  }, []);
+
+  const editItem = (item) => {
+    if(item.type == Constants.accountTypes.credit){
+      navigation.navigate(Routes.addOrEditCard, {id: item.id})
+    }else{
+      navigation.navigate(Routes.addOrEditBank, {id: item.id})
+    }
+  }
+
+  const deleteItem = (item) => {
+    Alert.alert(
+      'Are you sure?', 
+      '',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        { 
+          text: 'OK',
+          onPress: () => AccountService.deleteAccount(item.id)
+        }
+      ]);
+  }
 
 
   const _renderItems = ({ item }) => {
     return (
       <View style={styles.listItem}>
         <View style={{flex: 1}}>
-          <Text style={styles.cardNo}>{item.cardNo}</Text>
-          <Text style={styles.cardName}>{item.cardName}</Text>
-          <Text style={styles.type}>{item.type}</Text>
+          <Text style={styles.cardNo}>{item.accountNumber}</Text>
+          <Text style={styles.cardName}>{item.name}</Text>
+          <Text style={styles.type}>{item.type == 'bank' ? 'Bank' : 'Credit Card'}</Text>
         </View>
 
-        <TouchableOpacity style={styles.listItemButton}>
+        <TouchableOpacity style={styles.listItemButton} onPress={()=>deleteItem(item)}>
           <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.listItemButton}>
+        <TouchableOpacity style={styles.listItemButton} onPress={()=>editItem(item)}>
           <Text>Edit</Text>
         </TouchableOpacity>
       </View>

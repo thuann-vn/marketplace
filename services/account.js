@@ -7,7 +7,17 @@ export const AccountService = {
     updateProfile: (data)=>{
         return api.call('/api/v1/users/update', data, 'POST');
     },
-    getAccounts: () => {
-        return api.call('/api/v1/users/0/0');
+    getAccounts: (id = 0) => {
+        return api.call('/api/v1/users/account/1/' + id);
+    },
+    deleteAccount: (id) => {
+        return api.call('/api/v1/users/account/' + id, 'DELETE');
+    },
+    addOrEditAccount: (data) => {
+        if(data.id > 0){
+            return api.call('/api/v1/users/account', data, 'PUT');
+        }else{
+            return api.call('/api/v1/users/account', data,'POST');
+        }
     }
 }

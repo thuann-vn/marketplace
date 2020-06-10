@@ -24,7 +24,7 @@ export default API = {
             try{
                 return response.json()
             }catch(ex){
-                console.log('Parse respone failed', response);
+                console.log('Parse response failed', response);
             }
         }).catch((error)=>{
             console.log('Call Api Error', CONFIG.apiUrl + url, error)

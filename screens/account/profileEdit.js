@@ -32,8 +32,6 @@ export default function ProfileEditScreen() {
   const [zip, setZip] = React.useState(false);
 
   const settings = useSelector(state => state.settings);
-  console.log(settings);
-
   React.useEffect(()=>{
     AccountService.getProfile().then(response => {
       if(response.status == 'success'){

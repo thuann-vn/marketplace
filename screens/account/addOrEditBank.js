@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -10,15 +10,87 @@ import ProfileName from './includes/profileName';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
+import { AccountService } from '../../services/account';
+import Constants from '../../constants/Constants';
+import { useNavigation } from '@react-navigation/native';
+import { Routes } from '../../constants/Routes';
 
-export default function AddOrEditBankScreen() {
+export default function AddOrEditBankScreen({ navigation, route }) {
   const [name, setName] = React.useState('');
-  const [routingName, setRoutingName] = React.useState('');
+  const [routingNumber, setRoutingNumber] = React.useState('');
   const [accountNumber, setAccountNumber] = React.useState('');
   const [isDefault, setDefault] = React.useState(false);
   const [isDefaultReceipt, setDefaultReceipt] = React.useState(false);
-  const [isSelected, setSelection] = React.useState(false);
+  const id = route.params?.id ? route.params?.id : 0;
 
+  //Get data
+  React.useEffect(()=>{
+    if(id > 0){
+      AccountService.getAccounts(id).then(response => {
+        if(response.status == 'success'){
+          const data = response.payload[0];
+          setName(data.name);
+          setRoutingNumber(data.accountNumber);
+          setAccountNumber(data.routingNumber);
+          setDefault(data.default == 'yes');
+        }
+      });
+    }
+  }, []);
+
+	const _validate = ()=>{
+    var errors = [];
+    var isValid = true;
+    
+    if(!name){
+      var isValid = false;
+      errors.push('Account name is required');
+    }
+    
+    if(!routingNumber){
+      var isValid = false;
+      errors.push('Routing number is required');
+    }
+    
+    if(!routingNumber){
+      var isValid = false;
+      errors.push('Routing number is required');
+    }
+    
+    if(!isValid && errors.length){
+      Alert.alert(errors[0]);
+    }
+    
+		return isValid;
+	}
+
+
+  const submit = ()=>{
+    if(_validate()){
+      AccountService.addOrEditAccount({
+        id: id,
+        name: name,
+        accountNumber: accountNumber,
+        routingNumber: routingNumber,
+        type: Constants.accountTypes.bank,
+        default: isDefault ? 'yes' : 'no',
+        mode: '1',
+        city: '1',
+        state: '1',
+        country: '1',
+        zip: '1'
+      }).then(response =>{
+        console.log(response);
+        if(response.status == 'success'){
+          navigation.navigate(Routes.accountSetup);
+        }else{
+          if(Array.isArray(response.msg) && response.msg.length){
+            return Alert.alert(response.msg[0]);
+          }
+        }
+      })
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,7 +107,7 @@ export default function AddOrEditBankScreen() {
           <AddCardAndBankSidebar />
           <View style={styles.inputContainer}>
             <View style={styles.cardNoContainer}>
-              <TextInput placeholder="ROUTING NUMBER" value={routingName} onChangeText={setRoutingName} style={[CommonStyles.input, styles.routingNameInput]} placeholderTextColor="#333" />
+              <TextInput placeholder="ROUTING NUMBER" value={routingNumber} onChangeText={setRoutingNumber} style={[CommonStyles.input, styles.routingNameInput]} placeholderTextColor="#333" />
               <TextInput placeholder="ACCOUNT NUMBER" value={accountNumber} onChangeText={setAccountNumber} style={[CommonStyles.input, styles.accountNumberInput]} placeholderTextColor="#333" />
             </View>
             <TextInput placeholder="ACCOUNT NAME" value={name} onChangeText={setName} style={CommonStyles.input} placeholderTextColor="#333" />
@@ -56,7 +128,7 @@ export default function AddOrEditBankScreen() {
               checkedColor={Colors.mainColor}
             />
             <View style={styles.saveButtonContainer}>
-              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]}>
+              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]} onPress={submit}>
                 <Text style={CommonStyles.buttonLabel}>SAVE</Text>
               </TouchableOpacity>
             </View>
