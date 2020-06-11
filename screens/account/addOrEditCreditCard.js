@@ -122,8 +122,6 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
             <TextInput placeholder="NAME ON THE CARD" value={name} onChangeText={setName} style={CommonStyles.input} placeholderTextColor="#333" />
             <View style={styles.cardNoContainer}>
               <TextInput placeholder="CREDIT CARD" value={cardNo} onChangeText={setCardNo} style={[CommonStyles.input, styles.cardNoInput]} placeholderTextColor="#333" />
-              <TextInput placeholder="CVV" value={cvv} onChangeText={setCvv} style={[CommonStyles.input, styles.cvvInput]} placeholderTextColor="#333" />
-              <TextInput placeholder="EXP" value={exp} onChangeText={setExp} style={[CommonStyles.input, styles.expInput]} placeholderTextColor="#333" />
             </View>
             <TextInput placeholder="BILLING ADDRESS" value={billAddress} onChangeText={setBillAddress} style={CommonStyles.input} placeholderTextColor="#333" />
 

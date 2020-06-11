@@ -18,6 +18,7 @@ import { CommonStyles } from '../../constants/Styles';
 import { CompanyService } from '../../services/company';
 import Layout from '../../constants/Layout';
 import { Routes } from '../../constants/Routes';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ADDRESSTYPES = [
   { label: 'RESIDENTIAL', value: 'residential'},
@@ -48,21 +49,31 @@ export default function CompanyScreen({navigation}) {
   const [addressType, setAddressType] = React.useState('residential');
   const [billingType, setBillingType] = React.useState('billing');
 
-  //Get data
-  React.useEffect(()=>{
+  //Get data function
+  const _loadData = ()=>{
     CompanyService.list().then(response => {
       if(response.status == 'success'){
-        console.log(response);
         setCompanyList(response.payload);
+      }else{
+        Alert.alert(response.msg);
       }
     });
-  }, []);
+  }
+
+  //Get data
+  React.useEffect(_loadData, []);
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      _loadData();
+    }, [])
+  );
 
   //Edit item
   const editItem = (item) => {
     navigation.navigate(Routes.companyDetail, {id: item.id})
   }
-
 
   //Delete item
   const deleteItem = (deleteItem) => {
