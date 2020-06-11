@@ -39,7 +39,6 @@ export default function ProfileName(props) {
 
 const styles = StyleSheet.create({
   container:{
-      flex: 1
   },
   profileName: {
     fontSize: 20,

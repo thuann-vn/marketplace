@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -18,8 +18,6 @@ import { Routes } from '../../constants/Routes';
 export default function AddOrEditCreditCardScreen({ navigation, route }) {
   const [name, setName] = React.useState('');
   const [cardNo, setCardNo] = React.useState('');
-  const [cvv, setCvv] = React.useState('');
-  const [exp, setExp] = React.useState('');
   const [billAddress, setBillAddress] = React.useState('');
   const [isDefault, setDefault] = React.useState(false);
 
@@ -32,14 +30,12 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
         if(response.status == 'success'){
           const data = response.payload[0];
           setName(data.name);
-          setRoutingNumber(data.accountNumber);
-          setAccountNumber(data.routingNumber);
+          setCardNo(data.accountNumber);
           setDefault(data.default == 'yes');
         }
       });
     }
   }, []);
-
 
 	const _validate = ()=>{
     var errors = [];
@@ -55,21 +51,6 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
       errors.push('Card No is required');
     }
     
-    if(!cvv){
-      var isValid = false;
-      errors.push('CVV is required');
-    }
-
-    if(!exp){
-      var isValid = false;
-      errors.push('EXP is required');
-    }
-
-    if(!billAddress){
-      var isValid = false;
-      errors.push('Billing Address is required');
-    }
-    
     if(!isValid && errors.length){
       Alert.alert(errors[0]);
     }
@@ -83,8 +64,8 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
       AccountService.addOrEditAccount({
         name: name,
         accountNumber: cardNo,
-        routingNumber: routingNumber,
         type: Constants.accountTypes.credit,
+        routingNumber: '',
         default: isDefault ? 'yes' : 'no',
         mode: '1',
         city: '1',

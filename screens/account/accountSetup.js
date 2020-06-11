@@ -4,25 +4,37 @@ import { ScrollView, TouchableOpacity, FlatList } from 'react-native-gesture-han
 
 import CustomHeader from '../../components/CustomHeader';
 import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Routes } from '../../constants/Routes';
 import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 import { AccountService } from '../../services/account';
 import Constants from '../../constants/Constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountSetupScreen() {
   const navigation = useNavigation();
   const [accounts, setAccounts] = React.useState([]);
 
-  React.useEffect(()=>{
+
+  //Get data function
+  const _loadData = ()=>{
     AccountService.getAccounts().then(response => {
-      console.log(response);
       if(response.status == 'success'){
         setAccounts(response.payload);
       }
     });
-  }, []);
+  }
+
+  //Get data
+  React.useEffect(_loadData, []);
+
+  //Reload data if focus screen
+  useFocusEffect(
+    React.useCallback(() => {
+      _loadData();
+    }, [])
+  );
 
   const editItem = (item) => {
     if(item.type == Constants.accountTypes.credit){
@@ -75,7 +87,7 @@ export default function AccountSetupScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
+    <SafeAreaView style={styles.container}>
       <CustomHeader />
       <ProfileName />
       <View style={styles.separator}></View>
@@ -87,7 +99,7 @@ export default function AccountSetupScreen() {
           keyExtractor={(item, index) => 'item_' + index}
         />
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 

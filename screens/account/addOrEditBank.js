@@ -33,6 +33,7 @@ export default function AddOrEditBankScreen({ navigation, route }) {
           setRoutingNumber(data.accountNumber);
           setAccountNumber(data.routingNumber);
           setDefault(data.default == 'yes');
+          setDefaultReceipt(data.mode == 'receipt');
         }
       });
     }
@@ -74,7 +75,7 @@ export default function AddOrEditBankScreen({ navigation, route }) {
         routingNumber: routingNumber,
         type: Constants.accountTypes.bank,
         default: isDefault ? 'yes' : 'no',
-        mode: '1',
+        mode: isDefaultReceipt ? 'receipt' : 'out',
         city: '1',
         state: '1',
         country: '1',

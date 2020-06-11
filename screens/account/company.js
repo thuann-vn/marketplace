@@ -64,6 +64,7 @@ export default function CompanyScreen({navigation}) {
   React.useEffect(_loadData, []);
 
 
+  //Reload data if focus screen
   useFocusEffect(
     React.useCallback(() => {
       _loadData();
