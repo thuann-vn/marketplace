@@ -55,7 +55,6 @@ export default function AccountSetupScreen() {
       ]);
   }
 
-
   const _renderItems = ({ item }) => {
     return (
       <View style={styles.listItem}>

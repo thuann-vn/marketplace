@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text, SectionList } from 'react-native';
+import { Platform, StyleSheet, View, Text, SectionList, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -15,26 +15,117 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CompanySidebar from './includes/companySidebar';
 import { CommonStyles } from '../../constants/Styles';
+import { CompanyService } from '../../services/company';
+import Layout from '../../constants/Layout';
+import { Routes } from '../../constants/Routes';
 
-const COMPANYLIST = [
-  {
-    id: 1,
-    name: 'Test LLC'
-  },
-  {
-    id: 1,
-    name: 'Test LLC 2'
-  },
+const ADDRESSTYPES = [
+  { label: 'RESIDENTIAL', value: 'residential'},
+  { label: 'BUSINESS', value: 'business'}
+];
+
+const BILLINGTYPES = [
+  { label: 'BILLING', value: 'billing'},
+  { label: 'SHIPPING', value: 'shipping'},
+  { label: 'BOTH', value: 'both'}
 ]
 
-export default function CompanyScreen() {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [role, setRole] = React.useState('');
-  const [isSelected, setSelection] = React.useState(false);
-  const [editable, setEditable] = React.useState(false);
 
+export default function CompanyScreen({navigation}) {
+  const [companyList, setCompanyList] = React.useState([]);
+
+  const [companyName, setCompanyName] = React.useState('');
+  const [companyInfo, setCompanyInfo] = React.useState('');
+  const [subsidary, setSubsidary] = React.useState('');
+
+
+  const [house, setHouse] = React.useState('');
+  const [suite, setSuite] = React.useState('');
+  const [street, setStreet] = React.useState('');
+  const [state, setState] = React.useState('');
+  const [country, setCountry] = React.useState('');
+  const [zip, setZip] = React.useState('');
+  const [addressType, setAddressType] = React.useState('residential');
+  const [billingType, setBillingType] = React.useState('billing');
+
+  //Get data
+  React.useEffect(()=>{
+    CompanyService.list().then(response => {
+      if(response.status == 'success'){
+        console.log(response);
+        setCompanyList(response.payload);
+      }
+    });
+  }, []);
+
+  //Edit item
+  const editItem = (item) => {
+    navigation.navigate(Routes.companyDetail, {id: item.id})
+  }
+
+
+  //Delete item
+  const deleteItem = (deleteItem) => {
+    Alert.alert(
+      'Are you sure?', 
+      '',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        { 
+          text: 'OK',
+          onPress: () => CompanyService.deleteCompany(deleteItem.id).then((response)=>{
+            console.log(response);
+            const index = companyList.findIndex((item)=>{
+              return item.id == deleteItem.id;
+            });
+            const newCompanyList = companyList.splice(index, 1);
+            setCompanyList(newCompanyList);
+          })
+        }
+      ]);
+  }
+
+
+
+  //Validate
+	const _validate = ()=>{
+    var errors = [];
+    var isValid = true;
+    
+    if(!companyName){
+      var isValid = false;
+      errors.push('Company name is required');
+    }
+    
+    if(!isValid && errors.length){
+      Alert.alert(errors[0]);
+    }
+    
+		return isValid;
+	}
+
+  const submit = ()=>{
+    if(_validate()){
+      CompanyService.addOrEditCompany({
+        id: id,
+        name: companyName,
+        companyInfo: companyInfo,
+        payUsingParent: billToParent? 'yes' : 'no'
+      }).then(response =>{
+        console.log(response);
+        if(response.status == 'success'){
+          navigation.navigate(Routes.company);
+        }else{
+          if(Array.isArray(response.msg) && response.msg.length){
+            return Alert.alert(response.msg[0]);
+          }
+        }
+      })
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,40 +142,68 @@ export default function CompanyScreen() {
 
           <View style={styles.listApprovalContainer}>
             <FlatList
-              data={COMPANYLIST}
-              keyExtractor={(item, index) => 'approve_' + index}
+              data={companyList}
+              keyExtractor={(item, index) => 'company_' + index}
               renderItem={({item}) => {
                 return (<View style={styles.row}>
                   <View style={[styles.column, {flex: 1}]}>
                     <Text>{item.name}</Text>
                   </View>
                   <View style={styles.column}>
-                    <TouchableOpacity><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => editItem(item)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.deleteButton}>
+                  <TouchableOpacity style={styles.deleteButton} onPress={()=> deleteItem(item)}>
                     <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
                   </TouchableOpacity>
                 </View>)
               }}
-              ListFooterComponent={() => (
+              ListEmptyComponent={() => (
                 <View style={styles.listFooter}>
-                  <TextInput style={CommonStyles.input} placeholder="Company name"/>
-                  <TextInput style={CommonStyles.input} placeholder="Company Info"/>
-                  <TextInput style={CommonStyles.input} placeholder="subsidary yes/no"/>
-
+                  <TextInput style={CommonStyles.input} value={companyName} onChangeText={setCompanyName}  placeholder="Company name"/>
+                  <TextInput style={CommonStyles.input} value={companyInfo} onChangeText={setCompanyInfo}  placeholder="Company Info"/>
+                  <CheckBox
+                    title='Subsidary'
+                    checked={subsidary}
+                    onPress={() => setSubsidary(!subsidary)}
+                    containerStyle={CommonStyles.checkbox}
+                    checkedColor={Colors.mainColor}
+                    wrapperStyle={{ marginHorizontal: 0 }}
+                  />
                   <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
 
                   <View style={styles.houseSuiteContainer}>
-                    <TextInput placeholder="HOUSE" value={firstName} onChangeText={setFirstName} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333" editable={editable} />
-                    <TextInput placeholder="SUITE" value={lastName} onChangeText={setLastName} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333" editable={editable} />
+                    <TextInput placeholder="HOUSE" value={house} onChangeText={setHouse} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333"/>
+                    <TextInput placeholder="SUITE" value={suite} onChangeText={setSuite} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333"/>
                   </View>
 
-                  <TextInput placeholder="STREET" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="STATE" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="COUNTRY" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
-                  <TextInput placeholder="ZIP" value={phoneNumber} onChangeText={setPhoneNumber} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+                  <TextInput placeholder="STREET" value={street} onChangeText={setStreet} style={CommonStyles.input} placeholderTextColor="#333"/>
+                  <TextInput placeholder="STATE" value={state} onChangeText={setState} style={CommonStyles.input} placeholderTextColor="#333"/>
+                  <TextInput placeholder="COUNTRY" value={country} onChangeText={setCountry} style={CommonStyles.input} placeholderTextColor="#333"/>
+                  <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333"/>
 
-                  <TouchableOpacity style={CommonStyles.button}>
+                  <DropDownPicker
+                    items={ADDRESSTYPES}
+                    defaultIndex={ADDRESSTYPES.findIndex((item) => addressType == item.value)}
+                    style={styles.dropdown}
+                    labelStyle={{ textAlign: 'left' }}
+                    arrowSize={10}
+                    arrowStyle={{ top: 0 }}
+                    dropDownStyle={{zIndex: 100}}
+                    onChangeItem={item => setAddressType(item.value)}
+                  />
+
+                  <DropDownPicker
+                    items={BILLINGTYPES}
+                    defaultIndex={BILLINGTYPES.findIndex((item) => billingType == item.value)}
+                    zIndex={10}
+                    style={styles.dropdown}
+                    labelStyle={{ textAlign: 'left' }}
+                    arrowSize={10}
+                    arrowStyle={{ top: 0 }}
+                    onChangeItem={item => setBillingType(item.value)}
+                  />
+
+                  <TouchableOpacity style={CommonStyles.button} onPress={submit}>
                     <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
                   </TouchableOpacity>
                 </View>
@@ -122,6 +241,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flex: 1,
     flexGrow: 1,
+    minHeight: Layout.window.height,
     flexDirection: 'row'
   },
   listActions: {
@@ -223,6 +343,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 0,
     textAlign: 'left',
+    marginBottom: 5
   },
   editButton: {
     right: 0,

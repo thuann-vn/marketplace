@@ -50,7 +50,6 @@ export default function ManagementScreen(props) {
   const [] = React.useState(false);
   const [] = React.useState(false);
 
-
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader />
