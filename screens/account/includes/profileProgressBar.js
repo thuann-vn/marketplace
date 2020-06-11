@@ -1,14 +1,26 @@
 
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Layout from '../../../constants/Layout';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ProfileProgressBar({ }) {
+export default function ProfileProgressBar(props) {
+  const navigation = useNavigation();
   return (
     <View style={styles.profileCompleteContainer}>
-        <Text style={styles.text}>Your profile is complete.</Text>
+
+        <View style={styles.titleContainer}>
+          <Text style={styles.text}>Your profile is complete.</Text>
+          {
+            props.showBackButton ? (
+              <TouchableOpacity onPress={()=> navigation.canGoBack && navigation.goBack()}>
+                <Image source={require('../../../assets/images/icons/leftArrow.png')} style={styles.backIcon}/>
+              </TouchableOpacity>
+            ) : null
+          }
+        </View>
 
         <View style={{flexDirection:'row', marginTop: 10}}>
           <View style={styles.completeBarContainer}>
@@ -59,4 +71,13 @@ const styles = StyleSheet.create({
   updateProfileText: {
     textTransform: 'uppercase'
   },
+  titleContainer:{
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  backIcon:{
+    width: 36,
+    height: 36
+  }
 });

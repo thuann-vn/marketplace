@@ -77,7 +77,6 @@ export default function AccountSetupScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
       <CustomHeader />
-
       <ProfileName />
       <View style={styles.separator}></View>
       <View style={styles.listContainer}>

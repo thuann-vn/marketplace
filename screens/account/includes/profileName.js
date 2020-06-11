@@ -29,7 +29,7 @@ export default function ProfileName(props) {
 
         {
           props.showProgressbar && (
-            <ProfileProgressBar/>
+            <ProfileProgressBar showBackButton={props.hideTitle}/>
           )
         }
     </View>
