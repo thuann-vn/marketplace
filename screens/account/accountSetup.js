@@ -32,7 +32,7 @@ export default function AccountSetupScreen() {
     }
   }
 
-  const deleteItem = (item) => {
+  const deleteItem = (deleteItem) => {
     Alert.alert(
       'Are you sure?', 
       '',
@@ -43,7 +43,14 @@ export default function AccountSetupScreen() {
         },
         { 
           text: 'OK',
-          onPress: () => AccountService.deleteAccount(item.id)
+          onPress: () => AccountService.deleteAccount(deleteItem.id).then((response)=>{
+            console.log(response);
+            const index = accounts.findIndex((item)=>{
+              return item.id == deleteItem.id;
+            });
+            const newAccounts = accounts.splice(index, 1);
+            setAccounts(newAccounts);
+          })
         }
       ]);
   }

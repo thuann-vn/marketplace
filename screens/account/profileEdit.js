@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { Platform, StyleSheet, View, Text, Alert } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -16,6 +16,18 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { CommonStyles } from '../../constants/Styles';
 import { AccountService } from '../../services/account';
 import { useSelector } from 'react-redux';
+import Constants from '../../constants/Constants';
+
+const ADDRESSTYPES = [
+  { label: 'RESIDENTIAL', value: 'residential'},
+  { label: 'BUSINESS', value: 'business'}
+];
+
+const BILLINGTYPES = [
+  { label: 'BILLING', value: 'billing'},
+  { label: 'SHIPPING', value: 'shipping'},
+  { label: 'BOTH', value: 'both'}
+]
 
 export default function ProfileEditScreen() {
   const [firstName, setFirstName] = React.useState('');
@@ -24,12 +36,15 @@ export default function ProfileEditScreen() {
   const [role, setRole] = React.useState('');
   const [editable, setEditable] = React.useState(false);
   
-  const [house, setHouse] = React.useState(false);
-  const [suite, setSuite] = React.useState(false);
-  const [street, setStreet] = React.useState(false);
-  const [state, setState] = React.useState(false);
-  const [country, setCountry] = React.useState(false);
-  const [zip, setZip] = React.useState(false);
+  const [house, setHouse] = React.useState('');
+  const [suite, setSuite] = React.useState('');
+  const [street, setStreet] = React.useState('');
+  const [state, setState] = React.useState('');
+  const [country, setCountry] = React.useState('');
+  const [zip, setZip] = React.useState('');
+  const [addressType, setAddressType] = React.useState('residential');
+  const [billingType, setBillingType] = React.useState('billing');
+  const [isDefault, setDefault] = React.useState(false);
 
   const settings = useSelector(state => state.settings);
   React.useEffect(()=>{
@@ -37,6 +52,7 @@ export default function ProfileEditScreen() {
       if(response.status == 'success'){
         if(response.payload.id.length == 1){
           const user = response.payload.id[0];
+          console.log(user);
           setEditable(false);
           setFirstName(user.firstName);
           setLastName(user.lastName);
@@ -47,8 +63,8 @@ export default function ProfileEditScreen() {
           setSuite(user.suite);
           setStreet(user.street);
           setState(user.state);
-          setCountry(user.state);
-          setZip(user.zip);
+          setCountry(user.country);
+          setZip(user.zip ? user.zip.toString() : '');
         }
       }
     });
@@ -66,11 +82,23 @@ export default function ProfileEditScreen() {
     const updateData = {
       email: settings.userInfo.email,
       password: settings.userInfo.password,
-      firstName, lastName,mobileNo: phoneNumber, house, suite, street, state,  zip
+      firstName, lastName,
+      mobileNo: phoneNumber, 
+      house, 
+      suite, 
+      street, 
+      state,  
+      country,
+      zip,
+      role,
     }
-    
     AccountService.updateProfile(updateData).then(response => {
-      console.log(response);
+      if(response.status == 'success'){
+        setEditable(false);
+        Alert.alert(response.msg);
+      }else{
+        Alert.alert(response.msg);
+      }
     });
   }
 
@@ -101,19 +129,15 @@ export default function ProfileEditScreen() {
             <TextInput placeholder="MOBILE NUMBER" value={phoneNumber} onChangeText={setPhoneNumber} style={styles.input} placeholderTextColor="#333" editable={editable} />
 
             <DropDownPicker
-              items={[
-                { label: 'ID Proof', value: '1' },
-                { label: 'Address Proof', value: '2' },
-                { label: 'ID & Address Proof', value: '3' },
-                { label: 'Company Incoproation', value: '4' },
-                { label: 'Tax Certificate', value: '5' },
-              ]}
+              items={Object.keys(Constants.roles).map((key) => {
+                return  { label: Constants.roles[key], value: key}
+              })}
               defaultIndex={0}
               style={styles.dropdown}
               labelStyle={{ textAlign: 'left' }}
               arrowSize={10}
               arrowStyle={{ top: 0 }}
-              onChangeItem={item => console.log(item.label, item.value)}
+              onChangeItem={item => setRole(item.value)}
             />
 
             <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
@@ -127,6 +151,37 @@ export default function ProfileEditScreen() {
             <TextInput placeholder="STATE" value={state} onChangeText={setState} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
             <TextInput placeholder="COUNTRY" value={country} onChangeText={setCountry} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
             <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
+
+            <DropDownPicker
+              items={ADDRESSTYPES}
+              defaultIndex={ADDRESSTYPES.findIndex((item) => addressType == item.value)}
+              style={styles.dropdown}
+              labelStyle={{ textAlign: 'left' }}
+              arrowSize={10}
+              arrowStyle={{ top: 0 }}
+              dropDownStyle={{zIndex: 100}}
+              onChangeItem={item => setAddressType(item.value)}
+            />
+
+            <DropDownPicker
+              items={BILLINGTYPES}
+              defaultIndex={BILLINGTYPES.findIndex((item) => billingType == item.value)}
+              zIndex={10}
+              style={styles.dropdown}
+              labelStyle={{ textAlign: 'left' }}
+              arrowSize={10}
+              arrowStyle={{ top: 0 }}
+              onChangeItem={item => setBillingType(item.value)}
+            />
+
+            <CheckBox
+                title='Default Address'
+                checked={isDefault}
+                onPress={() => setDefault(!isDefault)}
+                containerStyle={CommonStyles.checkbox}
+                checkedColor={Colors.mainColor}
+              />
+
             {
               editable && (
                 <View style={styles.saveButtonContainer}>
@@ -257,6 +312,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 0,
     textAlign: 'left',
+    marginBottom: 5
   },
   editButton: {
     right: 0,

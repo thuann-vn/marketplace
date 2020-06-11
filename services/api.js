@@ -17,9 +17,10 @@ export default API = {
             options.headers.Authorization = `Bearer ${token}`;
         }
 
-        if(method.toUpperCase() == 'POST'){
+        if(method.toUpperCase() == 'POST' || method.toUpperCase() == 'PUT'){
             options.body = JSON.stringify(data);
         }
+        
         return fetch(CONFIG.apiUrl + url, options).then((response) => {
             try{
                 return response.json()

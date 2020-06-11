@@ -136,7 +136,7 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
                 checkedColor={Colors.mainColor}
               />
 
-              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]}>
+              <TouchableOpacity style={[CommonStyles.button, {marginTop: 0}]} onPress={submit}>
                 <Text style={CommonStyles.buttonLabel}>SAVE</Text>
               </TouchableOpacity>
             </View>
