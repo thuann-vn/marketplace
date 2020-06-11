@@ -53,11 +53,11 @@ export default function ProfileEditScreen() {
       AccountService.getProfile().then(response=>{
         return response;
       }),
-      AddressService.detail(1).then((response)=>{
-        return response;
-      })
+      // AddressService.detail(1).then((response)=>{
+      //   return response;
+      // })
     ]).then(result=>{
-      console.log(result);
+      console.log('ABC',result);
       const userResponse = result[0];
 
       //Prepare user information
@@ -70,12 +70,12 @@ export default function ProfileEditScreen() {
           setPhoneNumber(user.mobileNo);
           setRole(user.role);
   
-          // setHouse(user.house);
-          // setSuite(user.suite);
-          // setStreet(user.street);
-          // setState(user.state);
-          // setCountry(user.country);
-          // setZip(user.zip ? user.zip.toString() : '');
+          setHouse(user.house);
+          setSuite(user.suite);
+          setStreet(user.street);
+          setState(user.state);
+          setCountry(user.country);
+          setZip(user.zip ? user.zip.toString() : '');
         }
       }
 
@@ -152,6 +152,7 @@ export default function ProfileEditScreen() {
               arrowSize={10}
               arrowStyle={{ top: 0 }}
               onChangeItem={item => setRole(item.value)}
+              disabled={true}
             />
 
             <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
@@ -175,6 +176,7 @@ export default function ProfileEditScreen() {
               arrowStyle={{ top: 0 }}
               dropDownStyle={{zIndex: 100}}
               onChangeItem={item => setAddressType(item.value)}
+              disabled={!editable}
             />
 
             <DropDownPicker
@@ -186,16 +188,16 @@ export default function ProfileEditScreen() {
               arrowSize={10}
               arrowStyle={{ top: 0 }}
               onChangeItem={item => setBillingType(item.value)}
+              disabled={!editable}
             />
 
             <CheckBox
                 title='Default Address'
                 checked={isDefault}
-                onPress={() => setDefault(!isDefault)}
+                onPress={() => editable && setDefault(!isDefault)}
                 containerStyle={CommonStyles.checkbox}
                 checkedColor={Colors.mainColor}
               />
-
             {
               editable && (
                 <View style={styles.saveButtonContainer}>

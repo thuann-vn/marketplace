@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
 import { Routes } from '../../constants/Routes';
+import { AccountService } from '../../services/account';
 
 const APPROVELIST = [
   {
@@ -43,12 +44,45 @@ const APPROVELIST = [
 ]
 
 export default function ManagementScreen(props) {
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState('');
-  const [] = React.useState(false);
-  const [] = React.useState(false);
+  const [inviteUser, setInviteUser] = React.useState('');
+  const [costCode, setCostCode] = React.useState('');
+  const [addUser, setAddUser] = React.useState('');
+
+  React.useEffect(()=>{
+    Promise.all([
+      AccountService.getProfile().then(response=>{
+        return response;
+      }),
+      // AddressService.detail(1).then((response)=>{
+      //   return response;
+      // })
+    ]).then(result=>{
+      console.log('ABC',result);
+      const userResponse = result[0];
+
+      //Prepare user information
+      if(userResponse.status == 'success'){
+        if(userResponse.payload.id.length == 1){
+          const user = userResponse.payload.id[0];
+          setEditable(false);
+          setFirstName(user.firstName);
+          setLastName(user.lastName);
+          setPhoneNumber(user.mobileNo);
+          setRole(user.role);
+  
+          setHouse(user.house);
+          setSuite(user.suite);
+          setStreet(user.street);
+          setState(user.state);
+          setCountry(user.country);
+          setZip(user.zip ? user.zip.toString() : '');
+        }
+      }
+
+    }).catch(error => {
+      console.error('error', error);
+    })
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
