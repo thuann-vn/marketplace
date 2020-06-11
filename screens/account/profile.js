@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -18,35 +18,38 @@ export default function Profile({ navigation: { navigate } }) {
       <View style={styles.buttonListContainer}>
         <View>
           <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.accountSetup)}>
-            <MaterialCommunityIcons name="briefcase-edit-outline" size={32} color="#333" />
+            <View style={styles.imageContainer}>
+              <Image source={require('../../assets/images/icons/order.png')} style={{width: 32, height: 32}}/>
+            </View>
+            
             <Text style={styles.buttonLabel}>Account Setup</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.accountVerify)}>
-            <MaterialCommunityIcons name="account-check-outline" size={32} color="#333" />
+            <Image source={require('../../assets/images/icons/verify.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>Verify Credentials</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.accountManagement)}>
-            <MaterialIcons name="person" size={32} color="#333" />
+              <Image source={require('../../assets/images/icons/users.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>Users</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => navigate(Routes.company)}>
-            <MaterialCommunityIcons name="office-building" size={32} color="#333" />
+            <Image source={require('../../assets/images/icons/company.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>Company</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <MaterialCommunityIcons name="medal" size={32} color="#333" />
+            <Image source={require('../../assets/images/icons/coupon.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>My Rewards</Text>
           </TouchableOpacity>
 
         </View>
         <View>
           <TouchableOpacity style={styles.button}>
-            <FontAwesome5 name="handshake" size={32} color="#333" />
+            <Image source={require('../../assets/images/icons/agreement.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>Agreements</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <MaterialCommunityIcons name="star" size={32} color="#010101" />
+            <Image source={require('../../assets/images/icons/rating.png')} style={{width: 32, height: 32}}/>
             <Text style={styles.buttonLabel}>Rating</Text>
           </TouchableOpacity>
         </View>

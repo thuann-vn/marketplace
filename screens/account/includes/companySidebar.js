@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -12,11 +12,15 @@ export default function CompanySidebar() {
   return (
     <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.company)}>
-            <MaterialCommunityIcons name="office-building" size={32} color="#333" />
+            <View style={styles.imageContainer}>
+              <Image source={require('../../../assets/images/icons/company.png')} style={{width: 32, height: 32}}/>
+            </View>
             <Text style={styles.buttonLabel}>My Company</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.companyDetail)}>
-            <MaterialIcons name="add-circle-outline" size={32} color="#333" />
+            <View style={styles.imageContainer}>
+              <Image source={require('../../../assets/images/icons/plus.png')} style={{width: 24, height: 24}}/>
+            </View>
             <Text style={styles.buttonLabel}>Add Company</Text>
         </TouchableOpacity>
     </View>
@@ -42,6 +46,13 @@ const styles = StyleSheet.create({
     color: '#333',
     marginLeft: 5,
     textTransform: 'uppercase',
+    fontSize: 12,
     fontWeight: '300'
   },
+  imageContainer:{
+    width: 32,
+    height: 32,
+    alignContent: 'center',
+    alignItems: 'center'
+  }
 });

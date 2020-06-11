@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,11 +12,15 @@ export default function ProfileSidebar() {
   return (
     <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.profileEdit)}>
-            <MaterialCommunityIcons name="credit-card" size={32} color="#333" />
+            <View style={styles.imageContainer}>
+              <Image source={require('../../../assets/images/icons/order.png')} style={{width: 32, height: 32}} resizeMode="stretch"/>
+            </View>
             <Text style={styles.buttonLabel}>My Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate(Routes.accountManagement)}>
-            <MaterialCommunityIcons name="bank" size={32} color="#333" />
+            <View style={styles.imageContainer}>
+              <Image source={require('../../../assets/images/icons/verify.png')} style={{width: 24, height: 24}}/>
+            </View>
             <Text style={styles.buttonLabel}>Management</Text>
         </TouchableOpacity>
     </View>
@@ -42,6 +46,13 @@ const styles = StyleSheet.create({
     color: '#333',
     marginLeft: 5,
     textTransform: 'uppercase',
-    fontWeight: '300'
+    fontWeight: '300',
+    fontSize: 12,
   },
+  imageContainer:{
+    width: 32,
+    height: 32,
+    alignContent: 'center',
+    alignItems: 'center'
+  }
 });

@@ -22,7 +22,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={HomeScreen}
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require('../assets/images/icons/home.png')}/>,
         }}
       />
       <BottomTab.Screen
@@ -30,7 +30,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={LinksScreen}
         options={{
           title: 'My Tasks',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-copy" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require('../assets/images/icons/tasks.png')}  />,
         }}
       />
       <BottomTab.Screen
@@ -38,7 +38,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={LinksScreen}
         options={{
           title: 'Invoice',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require('../assets/images/icons/invoice.jpg')} style={{height: 24}}  />,
         }}
       />
       <BottomTab.Screen
@@ -46,7 +46,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={LinksScreen}
         options={{
           title: 'Post',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-paper" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require('../assets/images/icons/post.png')}  />,
         }}
       />
       <BottomTab.Screen
@@ -54,7 +54,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={LinksScreen}
         options={{
           title: 'Notification',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-notifications-outline" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} source={require('../assets/images/icons/notification.png')}   style={{height: 20}}/>,
         }}
       />
     </BottomTab.Navigator>

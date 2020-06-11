@@ -1,6 +1,6 @@
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, TextInput, Platform, StatusBar, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Popover from 'react-native-popover-view';
 import { withNavigation } from '@react-navigation/compat';
@@ -74,11 +74,7 @@ class CustomHeader extends React.Component {
           <TextInput placeholder="Search" style={styles.searchInput}/>
         </View>
         <TouchableOpacity>
-          <Octicons
-            name="comment-discussion"
-            size={34}
-            color='#777'
-          />
+          <Image source={require('../assets/images/icons/messages.png')} style={{width: 32, height: 32}}/>
         </TouchableOpacity>
     </View>
   );
