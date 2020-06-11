@@ -8,7 +8,7 @@ export const CompanyService = {
         return api.call('/api/v1/company/0/' + id);
     },
     deleteCompany: (id) => {
-        return api.call('/api/v1/company/' + id, 'DELETE');
+        return api.call('/api/v1/company/' + id, {}, 'DELETE');
     },
     addOrEditCompany: (data) => {
         if(data.id > 0){

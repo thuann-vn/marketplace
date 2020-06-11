@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     color: '#333',
     marginLeft: 10,
     textTransform: 'uppercase',
-    fontWeight: '300',
+    fontWeight: '600',
     fontSize: 12,
   },
   imageContainer:{

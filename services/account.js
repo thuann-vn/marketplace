@@ -11,7 +11,7 @@ export const AccountService = {
         return api.call('/api/v1/users/account/1/' + id);
     },
     deleteAccount: (id) => {
-        return api.call('/api/v1/users/account/' + id, 'DELETE');
+        return api.call('/api/v1/users/account/' + id, {}, 'DELETE');
     },
     addOrEditAccount: (data) => {
         if(data.id > 0){

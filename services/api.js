@@ -20,7 +20,6 @@ export default API = {
         if(method.toUpperCase() == 'POST' || method.toUpperCase() == 'PUT'){
             options.body = JSON.stringify(data);
         }
-        
         return fetch(CONFIG.apiUrl + url, options).then((response) => {
             try{
                 return response.json()

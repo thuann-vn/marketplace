@@ -56,11 +56,12 @@ export default function AccountSetupScreen() {
         { 
           text: 'OK',
           onPress: () => AccountService.deleteAccount(deleteItem.id).then((response)=>{
-            console.log(response);
-            const index = accounts.findIndex((item)=>{
+            let newAccounts = [...accounts];
+            const index = newAccounts.findIndex((item)=>{
               return item.id == deleteItem.id;
             });
-            const newAccounts = accounts.splice(index, 1);
+            
+            newAccounts.splice(index, 1);
             setAccounts(newAccounts);
           })
         }

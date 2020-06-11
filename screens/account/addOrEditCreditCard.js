@@ -74,7 +74,6 @@ export default function AddOrEditCreditCardScreen({ navigation, route }) {
         zip: '1',
         id: id
       }).then(response =>{
-        console.log(response);
         if(response.status == 'success'){
           navigation.navigate(Routes.accountSetup);
         }else{

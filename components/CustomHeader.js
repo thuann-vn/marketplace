@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
   menuItem:{
     flex: 1,
     flexDirection: 'row',
-    padding: 5,
+    padding: 10,
+    paddingHorizontal: 20
   },
   menuText:{
     color: '#000',

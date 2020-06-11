@@ -81,7 +81,6 @@ export default function AddOrEditBankScreen({ navigation, route }) {
         country: '1',
         zip: '1'
       }).then(response =>{
-        console.log(response);
         if(response.status == 'success'){
           navigation.navigate(Routes.accountSetup);
         }else{
