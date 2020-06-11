@@ -89,17 +89,17 @@ export default function CompanyScreen({navigation}) {
         { 
           text: 'OK',
           onPress: () => CompanyService.deleteCompany(deleteItem.id).then((response)=>{
-            console.log(response);
-            const index = companyList.findIndex((item)=>{
+            var newCompanyList = [...companyList];
+            const index = newCompanyList.findIndex((item)=>{
               return item.id == deleteItem.id;
             });
-            const newCompanyList = companyList.splice(index, 1);
+
+            newCompanyList.splice(index, 1);
             setCompanyList(newCompanyList);
           })
         }
       ]);
   }
-
 
 
   //Validate
@@ -122,14 +122,25 @@ export default function CompanyScreen({navigation}) {
   const submit = ()=>{
     if(_validate()){
       CompanyService.addOrEditCompany({
-        id: id,
         name: companyName,
         companyInfo: companyInfo,
-        payUsingParent: billToParent? 'yes' : 'no'
+        subsidary: subsidary ? 'yes' : 'no'
       }).then(response =>{
         console.log(response);
         if(response.status == 'success'){
-          navigation.navigate(Routes.company);
+          _loadData();
+          
+          //Clear data
+          setCompanyName('');
+          setCompanyInfo('');
+          setSubsidary(false);
+          setHouse('');
+          setCountry('');
+          setSuite('');
+          setStreet('');
+          setState('');
+          setState('');
+          setZip('');
         }else{
           if(Array.isArray(response.msg) && response.msg.length){
             return Alert.alert(response.msg[0]);
@@ -151,25 +162,10 @@ export default function CompanyScreen({navigation}) {
         <View style={styles.separator}></View>
         <View style={styles.listContainer}>
           <CompanySidebar />
-
           <View style={styles.listApprovalContainer}>
-            <FlatList
-              data={companyList}
-              keyExtractor={(item, index) => 'company_' + index}
-              renderItem={({item}) => {
-                return (<View style={styles.row}>
-                  <View style={[styles.column, {flex: 1}]}>
-                    <Text>{item.name}</Text>
-                  </View>
-                  <View style={styles.column}>
-                    <TouchableOpacity onPress={() => editItem(item)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
-                  </View>
-                  <TouchableOpacity style={styles.deleteButton} onPress={()=> deleteItem(item)}>
-                    <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
-                  </TouchableOpacity>
-                </View>)
-              }}
-              ListEmptyComponent={() => (
+            <Text style={styles.title}>My Company</Text>
+            {
+              !companyList.length ? (
                 <View style={styles.listFooter}>
                   <TextInput style={CommonStyles.input} value={companyName} onChangeText={setCompanyName}  placeholder="Company name"/>
                   <TextInput style={CommonStyles.input} value={companyInfo} onChangeText={setCompanyInfo}  placeholder="Company Info"/>
@@ -219,9 +215,27 @@ export default function CompanyScreen({navigation}) {
                     <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
                   </TouchableOpacity>
                 </View>
-              )}
-            />
+              ) : (
+                <FlatList
+                  data={companyList}
+                  keyExtractor={(item, index) => 'company_' + index}
+                  renderItem={({item}) => {
+                    return (<View style={styles.row}>
+                      <View style={[styles.column, {flex: 1}]}>
+                        <Text>{item.name}</Text>
+                      </View>
+                      <View style={styles.column}>
+                        <TouchableOpacity onPress={() => editItem(item)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
+                      </View>
+                      <TouchableOpacity style={styles.deleteButton} onPress={()=> deleteItem(item)}>
+                        <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
+                      </TouchableOpacity>
+                    </View>)
+                  }}
+                />
 
+              )
+            }
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -366,6 +380,8 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 5,
     marginBottom: 5,
+    textAlign: 'center',
+    fontSize: 18,
     fontWeight: '600'
   },
   addressTitle:{

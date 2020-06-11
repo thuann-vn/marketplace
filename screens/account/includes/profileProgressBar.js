@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Layout from '../../../constants/Layout';
 import { useNavigation } from '@react-navigation/native';
+import { Routes } from '../../../constants/Routes';
 
 export default function ProfileProgressBar(props) {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ export default function ProfileProgressBar(props) {
             <View style={[styles.completeBar, styles.completeRedBar]}></View>
           </View>
 
-          <TouchableOpacity style={styles.updateProfileButton}><Text style={styles.updateProfileText}>Update</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.updateProfileButton} onPress={()=> navigation.navigate(Routes.profileEdit)}><Text style={styles.updateProfileText}>Update</Text></TouchableOpacity>
         </View>
       </View>
   );

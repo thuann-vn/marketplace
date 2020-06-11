@@ -17,6 +17,7 @@ import { CommonStyles } from '../../constants/Styles';
 import { AccountService } from '../../services/account';
 import { useSelector } from 'react-redux';
 import Constants from '../../constants/Constants';
+import { AddressService } from '../../services/address';
 
 const ADDRESSTYPES = [
   { label: 'RESIDENTIAL', value: 'residential'},
@@ -48,26 +49,39 @@ export default function ProfileEditScreen() {
 
   const settings = useSelector(state => state.settings);
   React.useEffect(()=>{
-    AccountService.getProfile().then(response => {
-      if(response.status == 'success'){
-        if(response.payload.id.length == 1){
-          const user = response.payload.id[0];
-          console.log(user);
+    Promise.all([
+      AccountService.getProfile().then(response=>{
+        return response;
+      }),
+      AddressService.detail(1).then((response)=>{
+        return response;
+      })
+    ]).then(result=>{
+      console.log(result);
+      const userResponse = result[0];
+
+      //Prepare user information
+      if(userResponse.status == 'success'){
+        if(userResponse.payload.id.length == 1){
+          const user = userResponse.payload.id[0];
           setEditable(false);
           setFirstName(user.firstName);
           setLastName(user.lastName);
           setPhoneNumber(user.mobileNo);
           setRole(user.role);
   
-          setHouse(user.house);
-          setSuite(user.suite);
-          setStreet(user.street);
-          setState(user.state);
-          setCountry(user.country);
-          setZip(user.zip ? user.zip.toString() : '');
+          // setHouse(user.house);
+          // setSuite(user.suite);
+          // setStreet(user.street);
+          // setState(user.state);
+          // setCountry(user.country);
+          // setZip(user.zip ? user.zip.toString() : '');
         }
       }
-    });
+
+    }).catch(error => {
+      console.error('error', error);
+    })
   }, [])
 
   const firstNameInput = React.useRef(null);
