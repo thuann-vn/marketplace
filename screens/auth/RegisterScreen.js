@@ -11,6 +11,8 @@ import { AuthContext } from '../../context/auth';
 import { AuthService } from '../../services/auth';
 import { Alert } from 'react-native';
 import { Input } from 'react-native-elements';
+import DropDownPicker from '../../components/DropDownPicker';
+import Constants from '../../constants/Constants';
 
 export default class RegisterScreen extends React.Component {
   static contextType = AuthContext;
@@ -20,8 +22,8 @@ export default class RegisterScreen extends React.Component {
     this.state={
       // firstName: 'Thua',
       // familyName: 'Nguyen',
-      // email: 'ngocthua92@live.com',
-      // password: 'NgocThua92!',
+      email: 'ngocthua92@live.com',
+      password: 'NgocThua92!',
       role: 'BUYER'
     }
   }
@@ -52,7 +54,7 @@ export default class RegisterScreen extends React.Component {
     
 		if(isValid){
       var passwordValid = validatePassword(this.state.password);
-      if(passwordValid != true){
+      if(passwordValid !== true){
         isValid = false;
         errors.push(passwordValid);
       }
@@ -82,14 +84,11 @@ export default class RegisterScreen extends React.Component {
         }
       })
     }
+  }
 
-    AuthService.login(email, password).then((result) => {
-      if(result.status == 'success'){
-        const {Users, token} = result.payload; 
-        this.context.signIn(Users, token);
-      }
-    })
-    return;
+  // Change role
+  _changeRole = (item) => {
+    this.setState({role: item.value})
   }
 
   render(){
@@ -153,12 +152,30 @@ export default class RegisterScreen extends React.Component {
                   ref={(input) => { this.passwordInput = input; }} 
                   onSubmitEditing={this._submit} 
                   onChangeText={(text) => this.setState({password: text})}
-                  />
-                  <TouchableOpacity style={styles.submitButton} onPress={this._submit}>
-                    <Text style={[styles.text, styles.submitButtonLabel]}>AGREE AND JOIN</Text>
-                  </TouchableOpacity>
+                />
+
+                <DropDownPicker
+                  items={Object.keys(Constants.roles).map((key) => {
+                    return  { label: Constants.roles[key], value: key}
+                  })}
+                  defaultNull = {false}
+                  defaultIndex={0}
+                  style={styles.dropdown}
+                  arrowSize={14}
+                  arrowStyle={{ top: 0 }}
+                  onChangeItem={this._changeRole}
+                  labelStyle={{color: '#fff', textAlign: 'center'}}
+                  itemLabelStyle={{color: '#333', textAlign: 'left'}}
+                  alignText = "left"
+                  arrowColor="#fff"
+                  zIndex={10}
+                  dropDownMaxHeight={300}
+                />
+                <TouchableOpacity style={styles.submitButton} onPress={this._submit}>
+                  <Text style={[styles.text, styles.submitButtonLabel]}>AGREE AND JOIN</Text>
+                </TouchableOpacity>
+                <Text style={[styles.text, styles.footerInfoText]}>You agree to MarketSpace LLC’s User agreement, Privacy & Cookie Policy</Text>
               </View>
-              <Text style={[styles.text, styles.footerInfoText]}>You agree to MarketSpace LLC’s User agreement, Privacy & Cookie Policy</Text>
             </ScrollView>
           </KeyboardAwareScrollView>
       </View>
@@ -173,11 +190,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 80,
-		paddingHorizontal: 40,    
+    paddingHorizontal: 40,
+    flexGrow: 1,
+    minHeight: 600
   },
   footerInfoText: {
     fontSize: 14,
     textAlign: 'center',
+    zIndex: 5
   },
   text: {
     color: '#fff'
@@ -241,4 +261,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600'
   },
+  dropdown:{
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    paddingHorizontal: 8
+  }
 });

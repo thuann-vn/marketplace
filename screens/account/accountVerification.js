@@ -5,7 +5,7 @@ import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-
 import CustomHeader from '../../components/CustomHeader';
 import { useNavigation } from '@react-navigation/native';
 import ProfileName from './includes/profileName';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from '../../components/DropDownPicker';
 import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

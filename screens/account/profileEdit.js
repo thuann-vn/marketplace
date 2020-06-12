@@ -1,23 +1,19 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text, Alert } from 'react-native';
-import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, View, Text, Alert } from 'react-native';
+import { TouchableOpacity, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
-import { MaterialCommunityIcons, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { CheckBox } from 'react-native-elements';
 import Colors from '../../constants/Colors';
-import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
-import ProfileProgressBar from './includes/profileProgressBar';
 import ProfileSidebar from './includes/profileSidebar';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from '../../components/DropDownPicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';
 import { AccountService } from '../../services/account';
 import { useSelector } from 'react-redux';
 import Constants from '../../constants/Constants';
-import { AddressService } from '../../services/address';
 
 const ADDRESSTYPES = [
   { label: 'RESIDENTIAL', value: 'residential'},

@@ -111,7 +111,7 @@ export default function App(props) {
                         {!isLoggedIn ? (
                         <Stack.Navigator>
                           <Stack.Screen name={Routes.login} component={LoginScreen} options={Layout.defaultHeaderConfig}/>
-                          <Stack.Screen name={Routes.auth} component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
+                          <Stack.Screen name={Routes.register} component={RegisterScreen} options={Layout.defaultHeaderConfig}/>
                         </Stack.Navigator>
                         ) : (
                         <Stack.Navigator>

@@ -10,7 +10,6 @@ import AddCardAndBankSidebar from './includes/addCardAndBankSidebar';
 import ProfileName from './includes/profileName';
 import ProfileProgressBar from './includes/profileProgressBar';
 import ProfileSidebar from './includes/profileSidebar';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CommonStyles } from '../../constants/Styles';

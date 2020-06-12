@@ -21,26 +21,22 @@ export const validatePassword = (str)=>{
     }
 
     // Validate length
-    if(str.length >= 8) {
+    if(str.length <= 8) {
         return 'Password length must be 8 character at least';
     }
     
+    console.log(str.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g));
     // // Validate capital letters
-    // if(!str.test(/[A-Z]/g)) {
-    //     return 'Password must contain a Capital letter';
-    // }
+    if(!str.match(/[A-Z]/g)) {
+        return 'Password must contain a Capital letter';
+    }
 
-    // if(!str.test(/[0-9]/g)) {
-    //     return 'Password must contain one Number';
-    // }
-
-    // if(!str.test(/[0-9]/g)) {
-    //     return 'Password must contain one Number';
-    // }
-
-    // if(!str.test(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g)) {
-    //     return 'Password must contain one Special character';
-    // }
+    if(!str.match(/[0-9]/g)) {
+        return 'Password must contain one Number';
+    }
+    if(!str.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g)) {
+        return 'Password must contain one Special character';
+    }
 
     return true;
 }

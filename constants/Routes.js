@@ -1,5 +1,5 @@
 export const Routes = {
-    'auth' : 'AUTH',
+    'register' : 'REGISTER',
     'login' : 'LOGIN',
     'settings' : 'SETTINGS',
     'accountSetup' : 'ACCOUNT_SETUP',

@@ -11,6 +11,7 @@ import { AuthContext } from '../../context/auth';
 import { AuthService } from '../../services/auth';
 import { Alert } from 'react-native';
 import { Input } from 'react-native-elements';
+import { Routes } from '../../constants/Routes';
 
 export default class LoginScreen extends React.Component {
   static contextType = AuthContext;
@@ -66,6 +67,10 @@ export default class LoginScreen extends React.Component {
     }
     return;
   }
+  
+  _goToRegister = () => {
+    this.props.navigation.navigate(Routes.register);
+  }
 
   render(){
     return (
@@ -113,6 +118,10 @@ export default class LoginScreen extends React.Component {
                   />
                   <TouchableOpacity style={styles.submitButton} onPress={this._submit}>
                     <Text style={[styles.text, styles.submitButtonLabel]}>LOGIN</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.registerButton} onPress={this._goToRegister}>
+                    <Text style={[styles.text, styles.registerButtonLabel]}>Don't have account?</Text>
                   </TouchableOpacity>
               </View>
               <Text style={[styles.text, styles.footerInfoText]}>You agree to MarketSpace LLC’s User agreement, Privacy & Cookie Policy</Text>
@@ -198,4 +207,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600'
   },
+  registerButton:{
+    marginBottom: 20
+  },
+  registerButtonLabel: {
+    textAlign: 'center'
+  }
 });
