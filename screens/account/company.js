@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StyleSheet, View, Text, SectionList, Alert } from 'react-native';
+import { Platform, StyleSheet, View, Text, SectionList, Alert, ActivityIndicator } from 'react-native';
 import { ScrollView, TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 
 import CustomHeader from '../../components/CustomHeader';
@@ -19,18 +19,16 @@ import { CompanyService } from '../../services/company';
 import Layout from '../../constants/Layout';
 import { Routes } from '../../constants/Routes';
 import { useFocusEffect } from '@react-navigation/native';
+import { AddressService } from '../../services/address';
+import Constants from '../../constants/Constants';
 
-const ADDRESSTYPES = [
-  { label: 'RESIDENTIAL', value: 'residential'},
-  { label: 'BUSINESS', value: 'business'}
-];
+const ADDRESS_TYPES = Object.keys(Constants.addressTypes).map(key =>{
+  return  { label: key, value:  Constants.addressTypes[key]};
+});
 
-const BILLINGTYPES = [
-  { label: 'BILLING', value: 'billing'},
-  { label: 'SHIPPING', value: 'shipping'},
-  { label: 'BOTH', value: 'both'}
-]
-
+const ADDRESS_USE_TYPES = Object.keys(Constants.addressUseTypes).map(key =>{
+  return  { label: key, value: Constants.addressUseTypes[key]};
+});
 
 export default function CompanyScreen({navigation}) {
   const [companyList, setCompanyList] = React.useState([]);
@@ -38,31 +36,32 @@ export default function CompanyScreen({navigation}) {
   const [companyName, setCompanyName] = React.useState('');
   const [companyInfo, setCompanyInfo] = React.useState('');
   const [subsidary, setSubsidary] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
 
 
+  //Address
   const [house, setHouse] = React.useState('');
   const [suite, setSuite] = React.useState('');
   const [street, setStreet] = React.useState('');
   const [state, setState] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [zip, setZip] = React.useState('');
-  const [addressType, setAddressType] = React.useState('residential');
-  const [billingType, setBillingType] = React.useState('billing');
+  const [addressType, setAddressType] = React.useState(Constants.addressTypes.RESIDENTIAL);
+  const [useType, setUseType] = React.useState(Constants.addressUseTypes.BILLING);
 
   //Get data function
-  const _loadData = ()=>{
-    CompanyService.list().then(response => {
-      if(response.status == 'success'){
-        setCompanyList(response.payload);
-      }else{
-        Alert.alert(response.msg);
-      }
-    });
+  const _loadData = async ()=>{
+    const companyResponse = await CompanyService.list();
+    if(companyResponse.status == 'success'){
+      setCompanyList(companyResponse.payload);
+      setLoading(false);
+    }else{
+      Alert.alert(companyResponse.msg);
+    }
   }
 
   //Get data
-  React.useEffect(_loadData, []);
-
+  React.useEffect(() => _loadData, []);
 
   //Reload data if focus screen
   useFocusEffect(
@@ -119,37 +118,138 @@ export default function CompanyScreen({navigation}) {
 		return isValid;
 	}
 
-  const submit = ()=>{
+  //Create company button
+  const submit = async ()=>{
     if(_validate()){
-      CompanyService.addOrEditCompany({
+      const createCompanyResult = await CompanyService.addOrEditCompany({
         name: companyName,
         companyInfo: companyInfo,
         subsidary: subsidary ? 'yes' : 'no'
-      }).then(response =>{
-        console.log(response);
-        if(response.status == 'success'){
-          _loadData();
-          
-          //Clear data
-          setCompanyName('');
-          setCompanyInfo('');
-          setSubsidary(false);
-          setHouse('');
-          setCountry('');
-          setSuite('');
-          setStreet('');
-          setState('');
-          setState('');
-          setZip('');
-        }else{
-          if(Array.isArray(response.msg) && response.msg.length){
-            return Alert.alert(response.msg[0]);
-          }
+      });
+
+      console.log(createCompanyResult);
+
+
+      if(createCompanyResult.status == 'success'){
+        _loadData();
+
+        //Create address
+        const addressData = {
+          companyId: createCompanyResult.payload.id,
+          house, 
+          suite, 
+          street, 
+          state,  
+          country,
+          zip,
+          addressType: addressType,
+          useType: useType,
+          useTypeDefault: 'yes'
         }
-      })
+        const createAddressResult = await AddressService.addOrUpdateAddress(addressData);
+        console.log(createAddressResult);
+        
+        //Clear data
+        setCompanyName('');
+        setCompanyInfo('');
+        setSubsidary(false);
+        setHouse('');
+        setCountry('');
+        setSuite('');
+        setStreet('');
+        setState('');
+        setZip('');
+      }else{
+        if(Array.isArray(createCompanyResult.msg) && createCompanyResult.msg.length){
+          return Alert.alert(createCompanyResult.msg[0]);
+        }
+      }
     }
   }
 
+  //Render content
+  const _renderContent = () => {
+    if(loading){
+      return (
+        <View style={CommonStyles.loadingContainer}>
+          <ActivityIndicator size="small" color={Colors.mainColor} />
+        </View>
+      )
+    }
+
+    return !companyList.length ? (
+      <View style={styles.listFooter}>
+        <TextInput style={CommonStyles.input} value={companyName} onChangeText={setCompanyName}  placeholder="Company name"/>
+        <TextInput style={CommonStyles.input} value={companyInfo} onChangeText={setCompanyInfo}  placeholder="Company Info"/>
+        <CheckBox
+          title='Subsidary'
+          checked={subsidary}
+          onPress={() => setSubsidary(!subsidary)}
+          containerStyle={CommonStyles.checkbox}
+          checkedColor={Colors.mainColor}
+          wrapperStyle={{ marginHorizontal: 0 }}
+        />
+        <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
+
+        <View style={styles.houseSuiteContainer}>
+          <TextInput placeholder="HOUSE" value={house} onChangeText={setHouse} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333"/>
+          <TextInput placeholder="SUITE" value={suite} onChangeText={setSuite} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333"/>
+        </View>
+
+        <TextInput placeholder="STREET" value={street} onChangeText={setStreet} style={CommonStyles.input} placeholderTextColor="#333"/>
+        <TextInput placeholder="STATE" value={state} onChangeText={setState} style={CommonStyles.input} placeholderTextColor="#333"/>
+        <TextInput placeholder="COUNTRY" value={country} onChangeText={setCountry} style={CommonStyles.input} placeholderTextColor="#333"/>
+        <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333"/>
+
+        <DropDownPicker
+          defaultNull={false}
+          items={ADDRESS_TYPES}
+          defaultIndex={ADDRESS_TYPES.findIndex((item) => addressType == item.value)}
+          style={styles.dropdown}
+          labelStyle={{ textAlign: 'left' }}
+          arrowSize={10}
+          arrowStyle={{ top: 0 }}
+          dropDownStyle={{zIndex: 100}}
+          onChangeItem={item => setAddressType(item.value)}
+        />
+
+        <DropDownPicker
+          defaultNull={false}
+          items={ADDRESS_USE_TYPES}
+          defaultIndex={ADDRESS_USE_TYPES.findIndex((item) => useType == item.value)}
+          zIndex={10}
+          style={styles.dropdown}
+          labelStyle={{ textAlign: 'left' }}
+          arrowSize={10}
+          arrowStyle={{ top: 0 }}
+          onChangeItem={item => setUseType(item.value)}
+        />
+
+        <TouchableOpacity style={CommonStyles.button} onPress={submit}>
+          <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
+        </TouchableOpacity>
+      </View>
+    ) : (
+      <FlatList
+        data={companyList}
+        keyExtractor={(item, index) => 'company_' + index}
+        renderItem={({item}) => {
+          return (<View style={styles.row}>
+            <View style={[styles.column, {flex: 1}]}>
+              <Text>{item.name}</Text>
+            </View>
+            <View style={styles.column}>
+              <TouchableOpacity onPress={() => editItem(item)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.deleteButton} onPress={()=> deleteItem(item)}>
+              <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
+            </TouchableOpacity>
+          </View>)
+        }}
+      />
+
+    )
+  }
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader />
@@ -164,77 +264,9 @@ export default function CompanyScreen({navigation}) {
           <CompanySidebar />
           <View style={styles.listApprovalContainer}>
             <Text style={styles.title}>My Company</Text>
+            {_renderContent()}
             {
-              !companyList.length ? (
-                <View style={styles.listFooter}>
-                  <TextInput style={CommonStyles.input} value={companyName} onChangeText={setCompanyName}  placeholder="Company name"/>
-                  <TextInput style={CommonStyles.input} value={companyInfo} onChangeText={setCompanyInfo}  placeholder="Company Info"/>
-                  <CheckBox
-                    title='Subsidary'
-                    checked={subsidary}
-                    onPress={() => setSubsidary(!subsidary)}
-                    containerStyle={CommonStyles.checkbox}
-                    checkedColor={Colors.mainColor}
-                    wrapperStyle={{ marginHorizontal: 0 }}
-                  />
-                  <Text style={styles.addressTitle}>ADDRESS DETAILS</Text>
-
-                  <View style={styles.houseSuiteContainer}>
-                    <TextInput placeholder="HOUSE" value={house} onChangeText={setHouse} style={[CommonStyles.input, styles.houseInput]} placeholderTextColor="#333"/>
-                    <TextInput placeholder="SUITE" value={suite} onChangeText={setSuite} style={[CommonStyles.input, styles.suiteInput]} placeholderTextColor="#333"/>
-                  </View>
-
-                  <TextInput placeholder="STREET" value={street} onChangeText={setStreet} style={CommonStyles.input} placeholderTextColor="#333"/>
-                  <TextInput placeholder="STATE" value={state} onChangeText={setState} style={CommonStyles.input} placeholderTextColor="#333"/>
-                  <TextInput placeholder="COUNTRY" value={country} onChangeText={setCountry} style={CommonStyles.input} placeholderTextColor="#333"/>
-                  <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333"/>
-
-                  <DropDownPicker
-                    items={ADDRESSTYPES}
-                    defaultIndex={ADDRESSTYPES.findIndex((item) => addressType == item.value)}
-                    style={styles.dropdown}
-                    labelStyle={{ textAlign: 'left' }}
-                    arrowSize={10}
-                    arrowStyle={{ top: 0 }}
-                    dropDownStyle={{zIndex: 100}}
-                    onChangeItem={item => setAddressType(item.value)}
-                  />
-
-                  <DropDownPicker
-                    items={BILLINGTYPES}
-                    defaultIndex={BILLINGTYPES.findIndex((item) => billingType == item.value)}
-                    zIndex={10}
-                    style={styles.dropdown}
-                    labelStyle={{ textAlign: 'left' }}
-                    arrowSize={10}
-                    arrowStyle={{ top: 0 }}
-                    onChangeItem={item => setBillingType(item.value)}
-                  />
-
-                  <TouchableOpacity style={CommonStyles.button} onPress={submit}>
-                    <Text style={CommonStyles.buttonLabel}>SAVE/UPDATE</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <FlatList
-                  data={companyList}
-                  keyExtractor={(item, index) => 'company_' + index}
-                  renderItem={({item}) => {
-                    return (<View style={styles.row}>
-                      <View style={[styles.column, {flex: 1}]}>
-                        <Text>{item.name}</Text>
-                      </View>
-                      <View style={styles.column}>
-                        <TouchableOpacity onPress={() => editItem(item)}><Text style={styles.viewEditButtonLabel}>view/edit</Text></TouchableOpacity>
-                      </View>
-                      <TouchableOpacity style={styles.deleteButton} onPress={()=> deleteItem(item)}>
-                        <MaterialCommunityIcons name="delete-outline" size={24} color="#333" />
-                      </TouchableOpacity>
-                    </View>)
-                  }}
-                />
-
-              )
+              
             }
           </View>
         </View>

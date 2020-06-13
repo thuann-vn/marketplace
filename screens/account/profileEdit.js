@@ -16,16 +16,13 @@ import { useSelector } from 'react-redux';
 import Constants from '../../constants/Constants';
 import { AddressService } from '../../services/address';
 
-const ADDRESS_TYPES = [
-  { label: 'RESIDENTIAL', value: 'residential'},
-  { label: 'BUSINESS', value: 'business'}
-];
+const ADDRESS_TYPES = Object.keys(Constants.addressTypes).map(key =>{
+  return  { label: key, value:  Constants.addressTypes[key]};
+});
 
-const ADDRESS_USE_TYPES = [
-  { label: 'BILLING', value: 'billing'},
-  { label: 'SHIPPING', value: 'shipping'},
-  { label: 'BOTH', value: 'both'}
-]
+const ADDRESS_USE_TYPES = Object.keys(Constants.addressUseTypes).map(key =>{
+  return  { label: key, value: Constants.addressUseTypes[key]};
+});
 
 export default function ProfileEditScreen() {
   //Profile state
@@ -196,6 +193,7 @@ export default function ProfileEditScreen() {
             <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
 
             <DropDownPicker
+
               items={ADDRESS_TYPES}
               defaultIndex={ADDRESS_TYPES.findIndex((item) => addressType == item.value)}
               style={styles.dropdown}

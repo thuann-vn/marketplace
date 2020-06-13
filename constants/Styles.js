@@ -43,5 +43,10 @@ export const CommonStyles = StyleSheet.create({
       marginLeft: 0,
       backgroundColor: 'transparent'
     },
+    loadingContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      padding: 10
+    }
   });
   

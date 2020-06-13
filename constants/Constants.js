@@ -9,5 +9,14 @@ export default {
         BOTH: 'BOTH', 
         ADMIN: 'ADMIN',
         SUPPORT: 'SUPPORT'
+    },
+    addressTypes: {
+        RESIDENTIAL:'residential',
+        BUSINESS: 'business'
+    },
+    addressUseTypes: {
+        BILLING:'billing',
+        SHIPPING: 'shipping',
+        BOTH: 'both'
     }
 }
