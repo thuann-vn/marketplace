@@ -74,7 +74,6 @@ export default class RegisterScreen extends React.Component {
       AuthService.register({
         firstName, familyName, email, password, role
       }).then(result => {
-        console.log(result);
         if(result.status == 'fail'){
           Alert.alert(result.msg);
         }else{

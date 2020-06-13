@@ -57,28 +57,7 @@ export default function ManagementScreen(props) {
       //   return response;
       // })
     ]).then(result=>{
-      console.log('ABC',result);
-      const userResponse = result[0];
-
-      //Prepare user information
-      if(userResponse.status == 'success'){
-        if(userResponse.payload.id.length == 1){
-          const user = userResponse.payload.id[0];
-          setEditable(false);
-          setFirstName(user.firstName);
-          setLastName(user.lastName);
-          setPhoneNumber(user.mobileNo);
-          setRole(user.role);
-  
-          setHouse(user.house);
-          setSuite(user.suite);
-          setStreet(user.street);
-          setState(user.state);
-          setCountry(user.country);
-          setZip(user.zip ? user.zip.toString() : '');
-        }
-      }
-
+      
     }).catch(error => {
       console.error('error', error);
     })

@@ -14,25 +14,30 @@ import { CommonStyles } from '../../constants/Styles';
 import { AccountService } from '../../services/account';
 import { useSelector } from 'react-redux';
 import Constants from '../../constants/Constants';
+import { AddressService } from '../../services/address';
 
-const ADDRESSTYPES = [
+const ADDRESS_TYPES = [
   { label: 'RESIDENTIAL', value: 'residential'},
   { label: 'BUSINESS', value: 'business'}
 ];
 
-const BILLINGTYPES = [
+const ADDRESS_USE_TYPES = [
   { label: 'BILLING', value: 'billing'},
   { label: 'SHIPPING', value: 'shipping'},
   { label: 'BOTH', value: 'both'}
 ]
 
 export default function ProfileEditScreen() {
+  //Profile state
+  const [userId, setUserId] = React.useState(0);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [role, setRole] = React.useState('');
+  const [role, setRole] = React.useState(Constants.roles.SELLER);
   const [editable, setEditable] = React.useState(false);
   
+  //Address state
+  const [addressId, setAddressId] = React.useState(0);
   const [house, setHouse] = React.useState('');
   const [suite, setSuite] = React.useState('');
   const [street, setStreet] = React.useState('');
@@ -40,47 +45,61 @@ export default function ProfileEditScreen() {
   const [country, setCountry] = React.useState('');
   const [zip, setZip] = React.useState('');
   const [addressType, setAddressType] = React.useState('residential');
-  const [billingType, setBillingType] = React.useState('billing');
+  const [useType, setUseType] = React.useState('billing');
   const [isDefault, setDefault] = React.useState(false);
 
   const settings = useSelector(state => state.settings);
-  React.useEffect(()=>{
-    Promise.all([
-      AccountService.getProfile().then(response=>{
-        return response;
-      }),
-      // AddressService.detail(1).then((response)=>{
-      //   return response;
-      // })
-    ]).then(result=>{
-      console.log('ABC',result);
-      const userResponse = result[0];
 
-      //Prepare user information
-      if(userResponse.status == 'success'){
-        if(userResponse.payload.id.length == 1){
-          const user = userResponse.payload.id[0];
-          setEditable(false);
-          setFirstName(user.firstName);
-          setLastName(user.lastName);
-          setPhoneNumber(user.mobileNo);
-          setRole(user.role);
-  
-          setHouse(user.house);
-          setSuite(user.suite);
-          setStreet(user.street);
-          setState(user.state);
-          setCountry(user.country);
-          setZip(user.zip ? user.zip.toString() : '');
+  //Load data function
+  const _loadData = async () => {
+    const profile =  await AccountService.getProfile().then(response=>{
+      if(response.status == 'success'){
+        if(response.payload.id.length == 1){
+          return response.payload.id[0];
         }
       }
+      return null;
+    });
 
-    }).catch(error => {
-      console.error('error', error);
-    })
+    console.log(profile);
+    if(profile){
+      setEditable(false);
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
+      setPhoneNumber(profile.mobileNo);
+      setRole(profile.role);
+      setUserId(profile.id);
+
+      //Fetch address
+      const address =  await AddressService.userAddressDetail(profile.id).then(response => {
+        if(response.status == 'success' && response.payload.length){
+          return response.payload[0];
+        }
+        return null;
+      });
+      // console.log(address);
+      if(address){
+        setAddressId(address.id);
+        setHouse(address.house);
+        setSuite(address.suite);
+        setStreet(address.street);
+        setState(address.state);
+        setCountry(address.country);
+        setZip(address.zip);
+        setAddressType(address.addressType);
+        setUseType(address.useType);
+        setDefault(address.useTypeDefault == 'yes');
+      }
+    }
+  }
+
+  //Get profile and address
+  React.useEffect(()=>{
+    _loadData();    
   }, [])
 
   const firstNameInput = React.useRef(null);
+
   const setEditOn = () =>{
     setEditable(!editable);
     setTimeout(()=>{
@@ -88,28 +107,41 @@ export default function ProfileEditScreen() {
     })
   }
 
-  const submit = () =>{
+  const submit = async () =>{
     const updateData = {
       email: settings.userInfo.email,
       password: settings.userInfo.password,
       firstName, lastName,
-      mobileNo: phoneNumber, 
+      mobileNo: phoneNumber,
+      role
+    }
+    //Update profile first
+    const response = await AccountService.updateProfile(updateData);
+    if(response.status == 'success'){
+      setEditable(false);
+      Alert.alert(response.msg);
+    }else{
+      Alert.alert(response.msg);
+    }
+
+    //Update address
+    const addressData = {
+      id:  addressId,
+      userId,
       house, 
       suite, 
       street, 
       state,  
       country,
       zip,
-      role,
+      addressType: addressType,
+      useType: useType,
+      useTypeDefault: isDefault ? 'yes':'no'
     }
-    AccountService.updateProfile(updateData).then(response => {
-      if(response.status == 'success'){
-        setEditable(false);
-        Alert.alert(response.msg);
-      }else{
-        Alert.alert(response.msg);
-      }
-    });
+   const updateAddressResponse = await AddressService.addOrUpdateAddress(addressData);
+   if(updateAddressResponse.status != 'success'){
+     Alert.alert(updateAddressResponse.msg);
+   }
   }
 
   return (
@@ -142,7 +174,7 @@ export default function ProfileEditScreen() {
               items={Object.keys(Constants.roles).map((key) => {
                 return  { label: Constants.roles[key], value: key}
               })}
-              defaultIndex={0}
+              defaultIndex={Object.keys(Constants.roles).findIndex((key) => role == key)}
               style={styles.dropdown}
               labelStyle={{ textAlign: 'left' }}
               arrowSize={10}
@@ -164,8 +196,8 @@ export default function ProfileEditScreen() {
             <TextInput placeholder="ZIP" value={zip} onChangeText={setZip} style={CommonStyles.input} placeholderTextColor="#333" editable={editable} />
 
             <DropDownPicker
-              items={ADDRESSTYPES}
-              defaultIndex={ADDRESSTYPES.findIndex((item) => addressType == item.value)}
+              items={ADDRESS_TYPES}
+              defaultIndex={ADDRESS_TYPES.findIndex((item) => addressType == item.value)}
               style={styles.dropdown}
               labelStyle={{ textAlign: 'left' }}
               arrowSize={10}
@@ -176,14 +208,14 @@ export default function ProfileEditScreen() {
             />
 
             <DropDownPicker
-              items={BILLINGTYPES}
-              defaultIndex={BILLINGTYPES.findIndex((item) => billingType == item.value)}
+              items={ADDRESS_USE_TYPES}
+              defaultIndex={ADDRESS_USE_TYPES.findIndex((item) => useType == item.value)}
               zIndex={10}
               style={styles.dropdown}
               labelStyle={{ textAlign: 'left' }}
               arrowSize={10}
               arrowStyle={{ top: 0 }}
-              onChangeItem={item => setBillingType(item.value)}
+              onChangeItem={item => setUseType(item.value)}
               disabled={!editable}
             />
 

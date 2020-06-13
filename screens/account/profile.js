@@ -8,10 +8,11 @@ import { MaterialCommunityIcons, MaterialIcons, FontAwesome5 } from '@expo/vecto
 import { Routes } from '../../constants/Routes';
 import ProfileName from './includes/profileName';
 import ProfileProgressBar from './includes/profileProgressBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile({ navigation: { navigate } }) {
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} stickyHeaderIndices={[0]}>
+    <SafeAreaView style={styles.container}>
       <CustomHeader />
       <ProfileName hideTitle={true} showProgressbar={true}/>
       <View style={styles.separator}></View>
@@ -54,7 +55,7 @@ export default function Profile({ navigation: { navigate } }) {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 

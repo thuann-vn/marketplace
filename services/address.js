@@ -1,16 +1,20 @@
 import api from "./api"
 
 export const AddressService = {
+    userAddressDetail: (userId) => {
+        return api.call(`/api/v1/address/${userId}`);
+    },
     detail: (id)=> {
-        return api.call('/api/v1/address');
+        return api.call(`/api/v1/address/${id}`);
     },
     deleteAddress: (id) => {
-        return api.call('/api/v1/address/' + id, {}, 'DELETE');
+        return api.call(`/api/v1/address/${id}`, {}, 'DELETE');
     },
-    addAddress: (data) => {
-        return api.call('/api/v1/address', data, 'POST');
-    },
-    updateAddress: (data) => {
-        return api.call('/api/v1/address', data, 'PUT');
+    addOrUpdateAddress: (data) => {
+        if(data.id > 0){
+            return api.call('/api/v1/address', data, 'PUT');
+        }else{
+            return api.call('/api/v1/address', data,'POST');
+        }
     }
 }
