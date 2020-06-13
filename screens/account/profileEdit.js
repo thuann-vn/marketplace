@@ -58,7 +58,6 @@ export default function ProfileEditScreen() {
       return null;
     });
 
-    console.log(profile);
     if(profile){
       setEditable(false);
       setFirstName(profile.firstName);
@@ -74,7 +73,7 @@ export default function ProfileEditScreen() {
         }
         return null;
       });
-      // console.log(address);
+      
       if(address){
         setAddressId(address.id);
         setHouse(address.house);

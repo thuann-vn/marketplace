@@ -25,7 +25,6 @@ export const validatePassword = (str)=>{
         return 'Password length must be 8 character at least';
     }
     
-    console.log(str.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g));
     // // Validate capital letters
     if(!str.match(/[A-Z]/g)) {
         return 'Password must contain a Capital letter';

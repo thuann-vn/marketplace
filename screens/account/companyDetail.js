@@ -60,7 +60,6 @@ export default function CompanyDetailScreen({navigation, route}) {
         companyInfo: companyInfo,
         payUsingParent: billToParent? 'yes' : 'no'
       }).then(response =>{
-        console.log(response);
         if(response.status == 'success'){
           navigation.navigate(Routes.company);
         }else{

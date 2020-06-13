@@ -127,9 +127,6 @@ export default function CompanyScreen({navigation}) {
         subsidary: subsidary ? 'yes' : 'no'
       });
 
-      console.log(createCompanyResult);
-
-
       if(createCompanyResult.status == 'success'){
         _loadData();
 
@@ -147,7 +144,6 @@ export default function CompanyScreen({navigation}) {
           useTypeDefault: 'yes'
         }
         const createAddressResult = await AddressService.addOrUpdateAddress(addressData);
-        console.log(createAddressResult);
         
         //Clear data
         setCompanyName('');
